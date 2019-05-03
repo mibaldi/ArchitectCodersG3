@@ -1,7 +1,8 @@
-package com.mibaldi.brewing
+package com.mibaldi.brewing.ui.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.mibaldi.brewing.R
 
 class MainActivity : AppCompatActivity() {
 
