@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "84221882256",
+    "firebase_url": "https://brewing-933ac.firebaseio.com",
+    "project_id": "brewing-933ac",
+    "storage_bucket": "brewing-933ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84221882256:android:74f03ed00caa443f",
+        "android_client_info": {
+          "package_name": "com.mibaldi.brewing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "84221882256-donmim23liu79ns984evq91veb06tiu2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdykumJGTfaAFi0eUA2nR2P6Vhviw_pJY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "84221882256-donmim23liu79ns984evq91veb06tiu2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
