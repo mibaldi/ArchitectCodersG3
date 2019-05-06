@@ -1,13 +1,17 @@
-package com.mibaldi.brewing.ui.activities
+package com.mibaldi.brewing.ui.detail
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.mibaldi.brewing.R
 
-class MainActivity : AppCompatActivity() {
+class DetailActivity : AppCompatActivity() {
+    companion object {
+        const val PUB = "DetailActivity:pub"
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_detail)
     }
 }
