@@ -9,7 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.mibaldi.brewing.BuildConfig
+import kotlin.properties.Delegates
 
 fun ViewGroup.inflate(layoutId: Int): View {
     return LayoutInflater.from(context).inflate(layoutId,this,false)
@@ -51,3 +54,22 @@ inline fun <reified T : ViewModel> FragmentActivity.getViewModel(crossinline fac
 fun <T : Any, L : LiveData<T>> LifecycleOwner.observe(liveData: L, body: (T) -> Unit) {
     liveData.observe(this, Observer(body))
 }
+
+inline fun <VH : RecyclerView.ViewHolder, T> RecyclerView.Adapter<VH>.basicDiffUtil(
+    initialValue: List<T>,
+    crossinline areItemsTheSame: (T, T) -> Boolean = { old, new -> old == new },
+    crossinline areContentsTheSame: (T, T) -> Boolean = { old, new -> old == new }
+) =
+    Delegates.observable(initialValue) { _, old, new ->
+        DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+                areItemsTheSame(old[oldItemPosition], new[newItemPosition])
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+                areContentsTheSame(old[oldItemPosition], new[newItemPosition])
+
+            override fun getOldListSize(): Int = old.size
+
+            override fun getNewListSize(): Int = new.size
+        }).dispatchUpdatesTo(this@basicDiffUtil)
+    }

@@ -1,0 +1,114 @@
+[
+  {
+    "name": "Cervecería 43",
+    "photo": "https://lh5.googleusercontent.com/p/AF1QipNjcLuuqifuyYuu81ZiOFgUH-g2uQNp4PLszxy3=w408-h816-k-no",
+    "description": "Cervecería 43",
+    "category": "Bar de tapas",
+    "price": 3,
+    "address": {
+      "lat": 40.4623562,
+      "lon": -3.6872274,
+      "city": "Madrid"
+    },
+    "web": "",
+    "phone": "913 50 86 71"
+  },
+  {
+    "name": "Cervecería El Cotano",
+    "photo": "https://lh5.googleusercontent.com/p/AF1QipM4npiqk8V_JEjmXFxYGQor2TaSQoHhCLD6IxfN=w480-h240-k-no",
+    "description": "Cervecería El Cotano",
+    "category": "Bar de tapas",
+    "price": 3,
+    "address": {
+      "lat": 40.4557276,
+      "lon": -3.6789179,
+      "city": "Madrid"
+    },
+    "web": "",
+    "phone": "914 57 99 25"
+  },
+  {
+    "name": "Cervecería La Sureña",
+    "photo": "https://lh5.googleusercontent.com/p/AF1QipPCa9mqO2PR9sQIsgKI_gMO65TDPH9s8I-G_A-W=w408-h306-k-no",
+    "description": "Cervecería La Sureña",
+    "category": "Restaurante andaluz",
+    "price": 4,
+    "address": {
+      "lat": 40.4554868,
+      "lon": -3.6931229,
+      "city": "Madrid"
+    },
+    "web": "lasureña.es",
+    "phone": "911 73 37 88"
+  },
+  {
+    "name": "Cervecería Köln",
+    "photo": "https://lh5.googleusercontent.com/p/AF1QipNX8h2aUEcyTTkTVtawm5-YRhkl6vd00mdbizq2=w408-h306-k-no",
+    "description": "Cervecería Köln",
+    "category": "Bar",
+    "price": 3,
+    "address": {
+      "lat": 40.4517396,
+      "lon": -3.6948556,
+      "city": "Madrid"
+    },
+    "web": "",
+    "phone": "915 56 65 78"
+  },
+  {
+    "name": "LOS GRIFOS Craft Beers",
+    "photo": "https://lh5.googleusercontent.com/p/AF1QipOZN6u1MhH61TvLzUtRqfrnELXBb52cWpeul4UU=w426-h240-k-no",
+    "description": "LOS GRIFOS Craft Beers",
+    "category": "Cervecería artesanal",
+    "price": 5,
+    "address": {
+      "lat": 40.4287863,
+      "lon": -3.7052679,
+      "city": "Madrid"
+    },
+    "web": "losgrifos.es",
+    "phone": "910 52 26 31"
+  },
+  {
+    "name": "Cervecería Oldenburg",
+    "photo": "https://lh5.googleusercontent.com/p/AF1QipMQ7OlbJ__Y9n6yVNwWRuJk-TyQ2ZWRzgV4x8vo=w408-h306-k-no",
+    "description": "Cervecería Oldenburg",
+    "category": "Cervecería",
+    "price": 5,
+    "address": {
+      "lat": 40.4303972,
+      "lon": -3.7016818,
+      "city": "Madrid"
+    },
+    "web": "",
+    "phone": "914 48 23 41"
+  },
+  {
+    "name": "The Stuyck Co",
+    "photo": "https://lh5.googleusercontent.com/p/AF1QipPnq0Ns1GFMjgvjLXf4Ug0gISlYqZarxDg-uiaJ=w426-h240-k-no",
+    "description": "The Stuyck Co",
+    "category": "Cervecería artesanal",
+    "price": 5,
+    "address": {
+      "lat": 40.4264995,
+      "lon": -3.7017515,
+      "city": "Madrid"
+    },
+    "web": "thestuyckco.com",
+    "phone": "914 66 92 98"
+  },
+  {
+    "name": "Cervecería Santa Bárbara",
+    "photo": "https://lh5.googleusercontent.com/p/AF1QipMovc5Kf_1HGmNB8BPbm98g6twndqeUsX9dPdKG=w408-h306-k-no",
+    "description": "Cervecería Santa Bárbara",
+    "category": "Bar",
+    "price": 4,
+    "address": {
+      "lat": 40.4268691,
+      "lon": -3.6960089,
+      "city": "Madrid"
+    },
+    "web": "cerveceriasantabarbara.com",
+    "phone": "913 19 04 49"
+  }
+]
