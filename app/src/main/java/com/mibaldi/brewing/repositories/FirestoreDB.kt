@@ -4,9 +4,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.mibaldi.brewing.data.entities.firestore.Bar
 import com.google.android.gms.tasks.OnFailureListener
-import com.google.firebase.firestore.DocumentReference
 import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.reflect.TypeToken
@@ -36,40 +35,43 @@ object FirestoreDB {
         }
     }
 
-    private fun generateMock():List<Bar>{
+    fun getBarsOnce(){
+        val db = FirebaseFirestore.getInstance()
+        val collection = db.collection("bars")
+        collection.get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    Log.d("", "${document.id} => ${document.data}")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("", "Error getting documents: ", exception)
+            }
+    }
+    fun getBarsRealTime(){
+        val db = FirebaseFirestore.getInstance()
+        val collection = db.collection("bars")
+        collection.addSnapshotListener(EventListener<QuerySnapshot> { value, e ->
+                if (e != null) {
+                    Log.w("", "Listen failed.", e)
+                    return@EventListener
+                }
 
-
-        val bar = Bar(
-            null,
-            "Paddy's Bar Irlandés",
-            "https://lh5.googleusercontent.com/p/AF1QipPGQboGJ-jQ9l3kvOFJKYvBHaUxByFpbX2XPExg=w494-h240-k-no",
-            "Paddy's Bar Irlandés",
-            "Irish Pub",
-            8,
-            BarLocation(40.4519478, -3.6780381, "Madrid"),
-            "paddys.es",
-            "915 62 26 54"
-        )
-        val bar2 = Bar(
-            null,
-            "Zeus Bar",
-            "https://lh5.googleusercontent.com/p/AF1QipM3o7lH8e3SlmfznwOPGT0bvp9OafxEqQMgwHMf=w425-h240-k-no",
-            "Bar restaurante",
-            "Bar restaurante",
-            8,
-
-            BarLocation(40.4519886,-3.692506, "Madrid"),
-            "zeusbar.com",
-            "915 56 16 81"
-        )
-        //return listOf(bar,bar2)
-
-      return mockFromJson(json)
-
-
+                val cities = ArrayList<String>()
+                for (doc in value!!) {
+                    if (doc.get("name") != null) {
+                        cities.add(doc.getString("name")!!)
+                    }
+                }
+                Log.d("", "Current cites in CA: $cities")
+            })
     }
 
-    fun mockFromJson(json:String): List<Bar> {
+    private fun generateMock():List<Bar>{
+      return mockFromJson(json)
+    }
+
+    private fun mockFromJson(json:String): List<Bar> {
         return try {
             val listType = object : TypeToken<List<Bar>>() {}.type
             Gson().fromJson<List<Bar>>(json, listType)
@@ -78,20 +80,5 @@ object FirestoreDB {
         }
     }
 
-    fun loadJSONFromAsset(activity: AppCompatActivity): String {
-        var json: String? = null
-        try {
-            val inputStream = activity.assets.open("mock1.json")
-            val size = inputStream.available()
-            val buffer = ByteArray(size)
-            inputStream.read(buffer)
-            inputStream.close()
-            json = String(buffer, Charset.defaultCharset())
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            return ""
-        }
 
-        return json
-    }
 }

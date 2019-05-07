@@ -11,11 +11,11 @@ class BeerInteractor(activity: AppCompatActivity) {
 
 
     private val apiKey = activity.getString(R.string.api_key)
-    private val regionRepository = RegionRepository(activity)
+    //private val regionRepository = RegionRepository(activity)
 
     suspend fun getBeers() : List<Beer> {
         val beersResult = BreweryDB.service
-            .listPopularMoviesAsync(
+            .listPopularBeersAsync(
                 apiKey
             )
             .await()
