@@ -35,18 +35,12 @@ object FirestoreDB {
         }
     }
 
-    fun getBarsOnce(){
+    fun getBarsOnce(onSuccessListener: OnSuccessListener<QuerySnapshot>,onFailureListener: OnFailureListener){
         val db = FirebaseFirestore.getInstance()
         val collection = db.collection("bars")
         collection.get()
-            .addOnSuccessListener { documents ->
-                for (document in documents) {
-                    Log.d("", "${document.id} => ${document.data}")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("", "Error getting documents: ", exception)
-            }
+            .addOnSuccessListener(onSuccessListener)
+            .addOnFailureListener(onFailureListener)
     }
     fun getBarsRealTime(){
         val db = FirebaseFirestore.getInstance()
