@@ -8,6 +8,6 @@ import retrofit2.http.Query
 interface BreweryDBService  {
 
     @GET("beers")
-    fun listPopularMoviesAsync(
+    fun listPopularBeersAsync(
         @Query("key") apiKey: String): Deferred<BeersResult>
 }

@@ -6,7 +6,7 @@ import com.mibaldi.brewing.R
 
 class DetailActivity : AppCompatActivity() {
     companion object {
-        const val PUB = "DetailActivity:beer"
+        const val BEER = "DetailActivity:beer"
     }
 
 
