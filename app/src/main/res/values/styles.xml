@@ -8,4 +8,22 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="AppTheme.DarkOverlay" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="FabStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/spacing_large</item>
+        <item name="android:src">@drawable/ic_beer</item>
+        <item name="borderWidth">5dp</item>
+        <item name="elevation">@dimen/elevation_low</item>
+    </style>
 </resources>
