@@ -6,7 +6,7 @@ import com.mibaldi.brewing.R
 import com.mibaldi.brewing.base.activities.BaseActivity
 import com.mibaldi.brewing.interactors.GetBarInteractor.GetBarInteractorImpl
 import com.mibaldi.brewing.ui.adapters.BarAdapter
-import com.mibaldi.brewing.ui.detail.DetailActivity
+import com.mibaldi.brewing.ui.detail.BarDetailActivity
 import com.mibaldi.brewing.utils.observe
 import com.mibaldi.brewing.utils.startActivity
 import com.mibaldi.brewing.utils.withViewModel
@@ -34,8 +34,8 @@ class MainActivity : BaseActivity() {
 
         when (model) {
             is MainViewModel.UiModel.Content -> adapter.bars = model.bars
-            is MainViewModel.UiModel.Navigation -> startActivity<DetailActivity> {
-                putExtra(DetailActivity.BEER, model.bar)
+            is MainViewModel.UiModel.Navigation -> startActivity<BarDetailActivity> {
+                putExtra(BarDetailActivity.BEER, model.bar)
             }
         }
 
