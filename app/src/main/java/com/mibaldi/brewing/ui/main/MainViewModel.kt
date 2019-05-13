@@ -3,6 +3,7 @@ package com.mibaldi.brewing.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.mibaldi.brewing.data.model.BarView
 import com.mibaldi.brewing.data.model.Beer
 import com.mibaldi.brewing.interactors.BeerInteractor
@@ -21,6 +22,7 @@ class MainViewModel(private val barInteractor: GetBarInteractor) : ViewModel(), 
         }
     init {
         initScope()
+        _model.value = UiModel.CurrentUser(FirebaseAuth.getInstance().currentUser?.email.toString())
     }
 
     private fun refresh() {
@@ -44,6 +46,7 @@ class MainViewModel(private val barInteractor: GetBarInteractor) : ViewModel(), 
         object Loading : UiModel()
         class Content(val bars: List<BarView>) : UiModel()
         class Navigation(val bar: BarView) : UiModel()
+        class CurrentUser(val user: String) : UiModel()
     }
 
 }

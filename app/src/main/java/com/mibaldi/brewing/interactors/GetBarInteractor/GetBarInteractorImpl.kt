@@ -9,7 +9,6 @@ import com.mibaldi.brewing.data.entities.firestore.toBarView
 import com.mibaldi.brewing.data.model.BarView
 import com.mibaldi.brewing.repositories.FirestoreDB
 import kotlinx.coroutines.suspendCancellableCoroutine
-import java.lang.Exception
 import kotlin.coroutines.resume
 
 class GetBarInteractorImpl() :GetBarInteractor{

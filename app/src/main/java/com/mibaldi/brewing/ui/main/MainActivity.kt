@@ -2,6 +2,7 @@ package com.mibaldi.brewing.ui.main
 
 import android.os.Bundle
 import android.view.View
+import com.google.android.material.snackbar.Snackbar
 import com.mibaldi.brewing.R
 import com.mibaldi.brewing.base.activities.BaseActivity
 import com.mibaldi.brewing.interactors.GetBarInteractor.GetBarInteractorImpl
@@ -27,16 +28,20 @@ class MainActivity : BaseActivity() {
         recycler.adapter = adapter
     }
 
+    private fun showCurrentUser(user: String){
+        Snackbar.make(clMain,user,Snackbar.LENGTH_INDEFINITE).show()
+    }
+
 
 
     private fun updateUI(model: MainViewModel.UiModel) {
         progress.visibility = if (model is MainViewModel.UiModel.Loading) View.VISIBLE else View.GONE
-
         when (model) {
             is MainViewModel.UiModel.Content -> adapter.bars = model.bars
             is MainViewModel.UiModel.Navigation -> startActivity<BarDetailActivity> {
                 putExtra(BarDetailActivity.BEER, model.bar)
             }
+            is MainViewModel.UiModel.CurrentUser -> showCurrentUser(model.user)
         }
 
     }
