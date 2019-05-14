@@ -22,11 +22,11 @@ class MainViewModel(private val barInteractor: GetBarInteractor) : ViewModel(), 
         }
     init {
         initScope()
-        _model.value = UiModel.CurrentUser(FirebaseAuth.getInstance().currentUser?.email.toString())
     }
 
     private fun refresh() {
         launch {
+            _model.value = UiModel.CurrentUser(FirebaseAuth.getInstance().currentUser?.email.toString())
             _model.value = UiModel.Loading
             val results = barInteractor.getAllBars()
             _model.value = UiModel.Content(results)
