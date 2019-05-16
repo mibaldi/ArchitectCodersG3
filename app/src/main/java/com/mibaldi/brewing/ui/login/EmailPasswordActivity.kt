@@ -10,6 +10,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.mibaldi.brewing.R
 import com.mibaldi.brewing.base.activities.BaseActivity
+import com.mibaldi.brewing.interactors.CreateAccountInteractor.CreateAccountInteractor
+import com.mibaldi.brewing.interactors.CreateAccountInteractor.CreateAccountInteractorImpl
+import com.mibaldi.brewing.interactors.GetCurrentUserInteractor.GetCurrentUserInteractor
+import com.mibaldi.brewing.interactors.GetCurrentUserInteractor.GetCurrentUserInteractorImpl
+import com.mibaldi.brewing.interactors.SignInInteractor.SignInInteractor
+import com.mibaldi.brewing.interactors.SignInInteractor.SignInInteractorImpl
+import com.mibaldi.brewing.interactors.SignOutInteractor.SignOutInteractor
+import com.mibaldi.brewing.interactors.SignOutInteractor.SignOutInteractorImpl
 import com.mibaldi.brewing.ui.main.MainActivity
 import com.mibaldi.brewing.utils.observe
 import com.mibaldi.brewing.utils.startActivity
@@ -18,12 +26,23 @@ import kotlinx.android.synthetic.main.activity_email_password.*
 
 class EmailPasswordActivity : BaseActivity() {
     private lateinit var viewModel: EmailPasswordViewModel
+    private lateinit var createAccountInteractor: CreateAccountInteractor
+    private lateinit var getCurrentUserInteractor: GetCurrentUserInteractor
+    private lateinit var signInInteractor: SignInInteractor
+    private lateinit var signOutInteractor: SignOutInteractor
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_email_password)
-        viewModel = withViewModel({ EmailPasswordViewModel() }) {
+        initInteractors()
+        viewModel = withViewModel(
+            {
+                EmailPasswordViewModel(signInInteractor,
+                    getCurrentUserInteractor,
+                    createAccountInteractor,
+                    signOutInteractor)
+            }) {
             observe(model, ::updateUI)
         }
         emailSignInButton.setOnClickListener {
@@ -35,6 +54,13 @@ class EmailPasswordActivity : BaseActivity() {
         signOutButton.setOnClickListener {
             viewModel::signOut.invoke()
         }
+    }
+
+    private fun initInteractors() {
+        createAccountInteractor = CreateAccountInteractorImpl()
+        getCurrentUserInteractor = GetCurrentUserInteractorImpl()
+        signInInteractor = SignInInteractorImpl()
+        signOutInteractor = SignOutInteractorImpl()
     }
 
     private fun updateUI(model: EmailPasswordViewModel.UiModel) {

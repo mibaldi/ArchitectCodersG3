@@ -6,6 +6,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.mibaldi.brewing.R
 import com.mibaldi.brewing.base.activities.BaseActivity
 import com.mibaldi.brewing.interactors.GetBarInteractor.GetBarInteractorImpl
+import com.mibaldi.brewing.interactors.GetCurrentUserInteractor.GetCurrentUserInteractorImpl
 import com.mibaldi.brewing.ui.adapters.BarAdapter
 import com.mibaldi.brewing.ui.detail.BarDetailActivity
 import com.mibaldi.brewing.utils.observe
@@ -21,7 +22,8 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val getBarInteractor = GetBarInteractorImpl()
-        viewModel = withViewModel({MainViewModel(getBarInteractor)}){
+        val getCurrentUserInteractor = GetCurrentUserInteractorImpl()
+        viewModel = withViewModel({MainViewModel(getBarInteractor,getCurrentUserInteractor)}){
             observe(model,::updateUI)
         }
         adapter = BarAdapter(viewModel::onBarClicked)

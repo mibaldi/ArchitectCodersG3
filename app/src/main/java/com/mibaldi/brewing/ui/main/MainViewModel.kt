@@ -9,10 +9,13 @@ import com.mibaldi.brewing.data.model.Beer
 import com.mibaldi.brewing.interactors.BeerInteractor
 import com.mibaldi.brewing.interactors.GetBarInteractor.GetBarInteractor
 import com.mibaldi.brewing.interactors.GetBarInteractor.GetBarInteractorImpl
+import com.mibaldi.brewing.interactors.GetCurrentUserInteractor.GetCurrentUserInteractor
 import com.mibaldi.brewing.ui.common.Scope
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val barInteractor: GetBarInteractor) : ViewModel(), Scope by Scope.Impl {
+class MainViewModel(private val barInteractor: GetBarInteractor,
+                    private val getCurrentUserInteractor: GetCurrentUserInteractor
+                    ) : ViewModel(), Scope by Scope.Impl {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
@@ -26,7 +29,7 @@ class MainViewModel(private val barInteractor: GetBarInteractor) : ViewModel(), 
 
     private fun refresh() {
         launch {
-            _model.value = UiModel.CurrentUser(FirebaseAuth.getInstance().currentUser?.email.toString())
+            _model.value = UiModel.CurrentUser(getCurrentUserInteractor.currentUser()?.email.toString())
             _model.value = UiModel.Loading
             val results = barInteractor.getAllBars()
             _model.value = UiModel.Content(results)
