@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Brewing</string>
     <string name="api_key">68290e64bbd29ecb4d95f6f42e3f94fe</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="create_account">Create Account</string>
+    <string name="auth_failed">Authentication failed</string>
+    <string name="loading">Loading…</string>
+    <string name="sign_out">Sign Out</string>
 </resources>

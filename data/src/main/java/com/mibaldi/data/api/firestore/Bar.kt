@@ -1,8 +1,5 @@
 package com.mibaldi.data.api.firestore
 
-import com.mibaldi.domain.entity.Bar
-import com.mibaldi.domain.entity.BarLocation
-
 data class BarResponse(
     var id: String? = "",
     var name: String = "",
