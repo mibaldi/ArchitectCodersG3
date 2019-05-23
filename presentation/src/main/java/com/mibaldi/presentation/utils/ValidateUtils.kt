@@ -1,4 +1,4 @@
-package com.mibaldi.presentation.ui.common
+package com.mibaldi.presentation.utils
 
 import android.text.TextUtils
 import android.util.Patterns
@@ -32,7 +32,6 @@ fun validateEmail(email: String, valid: Boolean,myFunction:(Field)-> Unit): Bool
     when {
         TextUtils.isEmpty(email) -> {
             myFunction(Field.Email("Required"))
-
             valid1 = false
         }
         !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {

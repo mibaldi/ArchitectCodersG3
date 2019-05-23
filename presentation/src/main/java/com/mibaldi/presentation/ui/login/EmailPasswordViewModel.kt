@@ -9,10 +9,10 @@ import com.mibaldi.domain.interactors.createAccountInteractor.CreateAccountInter
 import com.mibaldi.domain.interactors.getCurrentUserInteractor.GetCurrentUserInteractor
 import com.mibaldi.domain.interactors.signInInteractor.SignInInteractor
 import com.mibaldi.domain.interactors.signOutInteractor.SignOutInteractor
-import com.mibaldi.presentation.ui.common.Field
+import com.mibaldi.presentation.utils.Field
 import com.mibaldi.presentation.ui.common.Scope
-import com.mibaldi.presentation.ui.common.validateEmail
-import com.mibaldi.presentation.ui.common.validatePassword
+import com.mibaldi.presentation.utils.validateEmail
+import com.mibaldi.presentation.utils.validatePassword
 import kotlinx.coroutines.launch
 
 class EmailPasswordViewModel(private val signInInteractor: SignInInteractor,
@@ -94,7 +94,7 @@ class EmailPasswordViewModel(private val signInInteractor: SignInInteractor,
         valid = validateEmail(email, valid) {
             _model.value = UiModel.ValidateForm(it)
         }
-        valid = validatePassword(password,valid) {
+        valid = validatePassword(password, valid) {
             _model.value = UiModel.ValidateForm(it)
         }
         return valid
