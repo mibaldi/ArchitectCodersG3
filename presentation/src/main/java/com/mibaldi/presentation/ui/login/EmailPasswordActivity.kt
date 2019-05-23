@@ -15,6 +15,7 @@ import com.mibaldi.domain.interactors.signOutInteractor.SignOutInteractorImpl
 import com.mibaldi.presentation.R
 import com.mibaldi.presentation.base.activities.BaseActivity
 import com.mibaldi.presentation.datasources.LoginDataSourceImpl
+import com.mibaldi.presentation.ui.common.Field
 import com.mibaldi.presentation.ui.main.MainActivity
 import com.mibaldi.presentation.utils.observe
 import com.mibaldi.presentation.utils.startActivity
@@ -68,8 +69,8 @@ class EmailPasswordActivity : BaseActivity() {
             }
             is EmailPasswordViewModel.UiModel.ValidateForm -> {
                 when (model.field) {
-                    is EmailPasswordViewModel.Field.Email -> fieldEmail.error = model.field.error
-                    is EmailPasswordViewModel.Field.Password -> fieldPassword.error = model.field.error
+                    is Field.Email -> fieldEmail.error = model.field.error
+                    is Field.Password -> fieldPassword.error = model.field.error
                 }
             }
             is EmailPasswordViewModel.UiModel.Navigation -> startActivity<MainActivity> {}

@@ -1,36 +1,32 @@
 package com.mibaldi.presentation.ui.login
 
-import android.text.TextUtils
 import android.util.Log
-import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseUser
 import com.mibaldi.domain.entity.MyFirebaseUser
 import com.mibaldi.domain.interactors.createAccountInteractor.CreateAccountInteractor
 import com.mibaldi.domain.interactors.getCurrentUserInteractor.GetCurrentUserInteractor
 import com.mibaldi.domain.interactors.signInInteractor.SignInInteractor
 import com.mibaldi.domain.interactors.signOutInteractor.SignOutInteractor
+import com.mibaldi.presentation.ui.common.Field
 import com.mibaldi.presentation.ui.common.Scope
+import com.mibaldi.presentation.ui.common.validateEmail
+import com.mibaldi.presentation.ui.common.validatePassword
 import kotlinx.coroutines.launch
 
 class EmailPasswordViewModel(private val signInInteractor: SignInInteractor,
                              private val getCurrentUserInteractor: GetCurrentUserInteractor,
                              private val createAccountInteractor: CreateAccountInteractor,
                              private val signOutInteractor: SignOutInteractor
-) : ViewModel() , Scope by Scope.Impl {
+) : ViewModel() , Scope by Scope.Impl() {
 
     sealed class UiModel {
         class Content(val user: MyFirebaseUser?) : UiModel()
         object Navigation : UiModel()
-        class ValidateForm(val field:Field): UiModel()
+        class ValidateForm(val field: Field): UiModel()
         class Loading(val show:Boolean) : UiModel()
         class Error(val errorString: String) : UiModel()
-    }
-    sealed class Field {
-        class Email(val error:String?) : Field()
-        class Password(val error:String?): Field()
     }
 
     private val _model = MutableLiveData<UiModel>()
@@ -95,42 +91,13 @@ class EmailPasswordViewModel(private val signInInteractor: SignInInteractor,
 
     private fun validateForm(email: String,password: String): Boolean {
         var valid = true
-        valid = validateEmail(email, valid)
-        valid = validatePassword(password, valid)
-
+        valid = validateEmail(email, valid) {
+            _model.value = UiModel.ValidateForm(it)
+        }
+        valid = validatePassword(password,valid) {
+            _model.value = UiModel.ValidateForm(it)
+        }
         return valid
-    }
-
-    private fun validatePassword(password: String, valid: Boolean): Boolean {
-        var valid1 = valid
-        when {
-            TextUtils.isEmpty(password) -> {
-                _model.value = UiModel.ValidateForm(Field.Password("Required."))
-                valid1 = false
-            }
-            password.length < 6 -> {
-                _model.value = UiModel.ValidateForm(Field.Password("The password should be at least 6 character."))
-                valid1 = false
-            }
-            else -> _model.value = UiModel.ValidateForm(Field.Password(null))
-        }
-        return valid1
-    }
-
-    private fun validateEmail(email: String, valid: Boolean): Boolean {
-        var valid1 = valid
-        when {
-            TextUtils.isEmpty(email) -> {
-                _model.value = UiModel.ValidateForm(Field.Email("Required"))
-                valid1 = false
-            }
-            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                _model.value = UiModel.ValidateForm(Field.Email("The email address is badly formatted."))
-                valid1 = false
-            }
-            else -> _model.value = UiModel.ValidateForm(Field.Email(null))
-        }
-        return valid1
     }
 
     companion object {
