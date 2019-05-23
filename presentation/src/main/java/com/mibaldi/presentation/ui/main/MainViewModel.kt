@@ -9,7 +9,7 @@ import com.mibaldi.presentation.ui.common.Scope
 import com.mibaldi.domain.interactors.bar.GetBarInteractor
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val barInteractor: GetBarInteractor) : ViewModel(), Scope by Scope.Impl {
+class MainViewModel(private val barInteractor: GetBarInteractor) : ViewModel(), Scope by Scope.Impl() {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
