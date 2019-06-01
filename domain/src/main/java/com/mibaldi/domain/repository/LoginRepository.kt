@@ -9,4 +9,5 @@ interface LoginRepository : BaseRepository {
     suspend fun createAccount(email:String,password:String): Either<String,Boolean>
     fun signOut()
     fun getCurrentUser() : MyFirebaseUser?
+    suspend fun removeAccount(): Either<String, Boolean>
 }
