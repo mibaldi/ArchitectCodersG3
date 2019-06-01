@@ -4,14 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mibaldi.domain.entity.MyFirebaseUser
-import com.mibaldi.presentation.data.model.BarView
-import com.mibaldi.presentation.data.model.toBarView
 import com.mibaldi.presentation.ui.common.Scope
-import com.mibaldi.domain.interactors.bar.GetBarInteractor
 import com.mibaldi.domain.interactors.getCurrentUserInteractor.GetCurrentUserInteractor
+import com.mibaldi.domain.interactors.signOutInteractor.SignOutInteractor
 import kotlinx.coroutines.launch
 
-class ProfileViewModel(private val getCurrentUserInteractor: GetCurrentUserInteractor) : ViewModel(), Scope by Scope.Impl() {
+class ProfileViewModel(
+    private val getCurrentUserInteractor: GetCurrentUserInteractor,
+    private val signOutInteractor: SignOutInteractor
+) : ViewModel(), Scope by Scope.Impl() {
 
     private val _model = MutableLiveData<UiModel>()
     val model: LiveData<UiModel>
@@ -28,7 +29,8 @@ class ProfileViewModel(private val getCurrentUserInteractor: GetCurrentUserInter
         launch {
             _model.value = UiModel.Loading
             val myFirebaseUser = getCurrentUserInteractor.currentUser()
-            _model.value = UiModel.Content(myFirebaseUser)
+            if (myFirebaseUser != null) _model.value = UiModel.Content(myFirebaseUser)
+            else _model.value = UiModel.Navigation
         }
     }
 
@@ -37,10 +39,15 @@ class ProfileViewModel(private val getCurrentUserInteractor: GetCurrentUserInter
         super.onCleared()
     }
 
+    fun logout() {
+        signOutInteractor.signOut()
+        _model.value = UiModel.Navigation
+    }
+
     sealed class UiModel {
         object Loading : UiModel()
-        class Content(val myFirebaseUser: MyFirebaseUser?) : UiModel()
-        class Navigation() : UiModel()
+        class Content(val myFirebaseUser: MyFirebaseUser) : UiModel()
+        object Navigation : UiModel()
     }
 
 }

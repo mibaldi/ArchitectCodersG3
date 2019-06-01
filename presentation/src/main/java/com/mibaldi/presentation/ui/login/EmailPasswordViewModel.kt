@@ -86,7 +86,12 @@ class EmailPasswordViewModel(private val signInInteractor: SignInInteractor,
     }
 
     fun onStart(){
-        _model.value = UiModel.Content(getCurrentUserInteractor.currentUser())
+        if (getCurrentUserInteractor.currentUser() != null){
+            _model.value = UiModel.Navigation
+        } else {
+            _model.value = UiModel.Content(null)
+        }
+
     }
 
     private fun validateForm(email: String,password: String): Boolean {
