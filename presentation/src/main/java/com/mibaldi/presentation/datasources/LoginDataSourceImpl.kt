@@ -1,8 +1,9 @@
 package com.mibaldi.presentation.datasources
 
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
-import com.mibaldi.brewing.utils.DataListener
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.mibaldi.data.datasource.LoginDataSource
 import com.mibaldi.domain.entity.Either
 import com.mibaldi.domain.entity.MyFirebaseUser
@@ -17,8 +18,8 @@ object LoginDataSourceImpl : LoginDataSource {
         suspendCancellableCoroutine<Either<String, Boolean>> { continuation ->
             auth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
-                    Log.d(TAG, "signInWithEmail:success")
-                    if (continuation.isActive)  continuation.resume(Either.Right(true))
+                    update { Log.d(TAG, "signInWithEmail:success")
+                        if (continuation.isActive) continuation.resume(Either.Right(true))      }
                 }.addOnFailureListener{
                     Log.w(TAG, "signInWithEmail:failure", it)
                     if (continuation.isActive)
@@ -28,11 +29,33 @@ object LoginDataSourceImpl : LoginDataSource {
 
         }
 
+    private fun update(taskSuccess:()->Unit ){
+        if (auth.currentUser?.photoUrl == null){
+            val email = auth.currentUser?.email!!
+            val index = email.indexOf('@')
+            val nickname = email.substring(0, index)
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName(nickname)
+                .setPhotoUri(Uri.parse("http://lorempixel.com/400/200"))
+                .build()
+
+            auth.currentUser?.updateProfile(profileUpdates)
+                ?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        taskSuccess()
+                    }
+                }
+        } else {
+            taskSuccess()
+        }
+
+    }
+
     override suspend fun createAccount(email: String, password: String) =
         suspendCancellableCoroutine<Either<String, Boolean>> { continuation ->
             auth.createUserWithEmailAndPassword(email,password).addOnSuccessListener {
-                Log.d(TAG, "createUserWithEmail:success")
-                if (continuation.isActive) continuation.resume(Either.Right(true))
+                update { Log.d(TAG, "createUserWithEmail:success")
+                    if (continuation.isActive) continuation.resume(Either.Right(true))      }
             }.addOnFailureListener {
                 Log.w(TAG, "createUserWithEmail:failure", it)
                 if (continuation.isActive)
@@ -45,14 +68,15 @@ object LoginDataSourceImpl : LoginDataSource {
 
     }
     override fun getCurrentUser(): MyFirebaseUser? {
-
-        return  if (auth.currentUser != null){
-            val email = auth.currentUser?.email!!
-            MyFirebaseUser(email)
-        }else {
-            null
+        return auth.currentUser?.let {
+            with(it) {
+                val email = email
+                val name = displayName
+                val photoUrl = photoUrl?.toString()
+                val phone = phoneNumber
+                MyFirebaseUser(email,name,photoUrl,phone)
+            }
         }
-
 
     }
 }

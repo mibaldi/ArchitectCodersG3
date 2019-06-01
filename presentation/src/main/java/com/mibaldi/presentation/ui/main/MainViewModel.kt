@@ -39,10 +39,15 @@ class MainViewModel(private val barInteractor: GetBarInteractor) : ViewModel(), 
         super.onCleared()
     }
 
+    fun goToProfile() {
+        _model.value = UiModel.NavigationProfile
+    }
+
     sealed class UiModel {
         object Loading : UiModel()
         class Content(val bars: List<BarView>) : UiModel()
         class Navigation(val bar: BarView) : UiModel()
+        object NavigationProfile : UiModel()
     }
 
 }

@@ -1,6 +1,8 @@
 package com.mibaldi.presentation.ui.main
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mibaldi.presentation.R
@@ -13,7 +15,13 @@ import com.mibaldi.presentation.utils.observe
 import com.mibaldi.presentation.utils.startActivity
 import com.mibaldi.presentation.utils.withViewModel
 import com.mibaldi.domain.interactors.bar.GetBarSimpleInteractor
+import com.mibaldi.presentation.ui.profile.ProfileActivity
 import kotlinx.android.synthetic.main.activity_main.*
+
+
+
+
+
 
 class MainActivity : BaseActivity() {
 
@@ -31,7 +39,20 @@ class MainActivity : BaseActivity() {
         adapter = BarAdapter(viewModel::onBarClicked)
         recycler.adapter = adapter
     }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.menuProfile -> {
+                viewModel.goToProfile()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
     private fun updateUI(model: MainViewModel.UiModel) {
         progress.visibility = if (model is MainViewModel.UiModel.Loading) View.VISIBLE else View.GONE
@@ -41,6 +62,7 @@ class MainActivity : BaseActivity() {
             is MainViewModel.UiModel.Navigation -> startActivity<BarDetailActivity> {
                 putExtra(BarDetailActivity.BEER, model.bar)
             }
+            is MainViewModel.UiModel.NavigationProfile -> startActivity<ProfileActivity> {}
         }
 
     }
