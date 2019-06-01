@@ -1,10 +1,12 @@
 package com.mibaldi.data.repository
 
 import com.mibaldi.data.datasource.LoginDataSource
+import com.mibaldi.domain.entity.Either
 import com.mibaldi.domain.entity.MyFirebaseUser
 import com.mibaldi.domain.repository.LoginRepository
 
 class LoginRepositoryImpl(private val loginDataSource: LoginDataSource) : LoginRepository {
+
 
 
     override suspend fun signIn(email: String, password: String)  =
@@ -19,6 +21,9 @@ class LoginRepositoryImpl(private val loginDataSource: LoginDataSource) : LoginR
     }
     override fun getCurrentUser(): MyFirebaseUser? {
         return loginDataSource.getCurrentUser()
+    }
+    override suspend fun removeAccount(): Either<String, Boolean> {
+        return loginDataSource.removeAccount()
     }
 
 

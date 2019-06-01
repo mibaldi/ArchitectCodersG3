@@ -73,7 +73,7 @@ class EmailPasswordActivity : BaseActivity() {
                     is Field.Password -> fieldPassword.error = model.field.error
                 }
             }
-            is EmailPasswordViewModel.UiModel.Navigation -> startActivity<MainActivity> {}
+            is EmailPasswordViewModel.UiModel.Navigation -> startActivity<MainActivity> { finish()}
             is EmailPasswordViewModel.UiModel.Loading -> {
                 if (model.show) showProgressDialog() else hideProgressDialog()
             }

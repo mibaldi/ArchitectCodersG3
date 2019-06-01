@@ -9,4 +9,5 @@ interface LoginDataSource: BaseDataSource {
     fun signOut()
 
     fun getCurrentUser() : MyFirebaseUser?
+    suspend fun removeAccount(): Either<String, Boolean>
 }

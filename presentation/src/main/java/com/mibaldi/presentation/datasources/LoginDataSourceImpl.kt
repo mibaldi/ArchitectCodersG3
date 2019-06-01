@@ -12,6 +12,7 @@ import kotlin.coroutines.resume
 
 object LoginDataSourceImpl : LoginDataSource {
 
+
     private val TAG = LoginDataSourceImpl::class.java.canonicalName
     private val auth = FirebaseAuth.getInstance()
     override suspend fun signIn(email: String, password: String) =
@@ -78,5 +79,18 @@ object LoginDataSourceImpl : LoginDataSource {
             }
         }
 
+    }
+
+    override suspend fun removeAccount(): Either<String, Boolean> {
+        val user = FirebaseAuth.getInstance().currentUser
+       return suspendCancellableCoroutine<Either<String, Boolean>> { continuation ->
+            user?.delete()?.addOnSuccessListener {
+                    Log.d(TAG, "User account deleted.")
+                    if (continuation.isActive) continuation.resume(Either.Right(true))
+                }?.addOnFailureListener {
+                    if (continuation.isActive)
+                        continuation.resume(Either.Left(it.message ?: "Error, Remove account failed."))
+                }
+        }
     }
 }
