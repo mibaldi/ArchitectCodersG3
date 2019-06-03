@@ -1,8 +1,8 @@
 package com.mibaldi.presentation.data.model
 
 import android.os.Parcelable
-import com.mibaldi.data.api.brewery.entity.BeersResult
-import com.mibaldi.data.api.brewery.entity.Datum
+import com.mibaldi.presentation.framework.api.brewery.entity.BeersResult
+import com.mibaldi.presentation.framework.api.brewery.entity.Datum
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

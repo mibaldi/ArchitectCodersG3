@@ -1,4 +1,4 @@
-package com.mibaldi.data.api.brewery.entity
+package com.mibaldi.presentation.framework.api.brewery.entity
 
 import com.google.gson.annotations.SerializedName
 
