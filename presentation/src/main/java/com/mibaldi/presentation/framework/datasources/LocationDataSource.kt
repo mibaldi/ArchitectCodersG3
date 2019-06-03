@@ -1,4 +1,4 @@
-package com.mibaldi.presentation.datasources
+package com.mibaldi.presentation.framework.datasources
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -11,7 +11,8 @@ interface LocationDataSource {
     suspend fun findLastLocation(): Location?
 }
 
-class PlayServicesLocationDataSource(activity: Activity) : LocationDataSource {
+class PlayServicesLocationDataSource(activity: Activity) :
+    LocationDataSource {
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
 
     @SuppressLint("MissingPermission")

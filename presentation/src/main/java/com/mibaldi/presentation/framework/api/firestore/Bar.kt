@@ -1,4 +1,4 @@
-package com.mibaldi.data.api.firestore
+package com.mibaldi.presentation.framework.api.firestore
 
 data class BarResponse(
     var id: String? = "",

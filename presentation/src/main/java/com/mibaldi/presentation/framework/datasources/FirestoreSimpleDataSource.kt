@@ -1,4 +1,4 @@
-package com.mibaldi.presentation.datasources
+package com.mibaldi.presentation.framework.datasources
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mibaldi.data.datasource.FirestoreDataSource
@@ -18,7 +18,6 @@ class FirestoreSimpleDataSource(private val firestoreApp: FirebaseFirestore) : F
                 .addOnSuccessListener {
                     val listOfBarView = mutableListOf<Bar>()
                     for (document in it) {
-
                         val bar = document.toObject(Bar::class.java)
                         listOfBarView.add(bar)
                     }
