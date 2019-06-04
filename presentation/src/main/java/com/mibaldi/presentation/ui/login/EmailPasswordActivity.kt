@@ -14,7 +14,7 @@ import com.mibaldi.domain.interactors.signOutInteractor.SignOutInteractor
 import com.mibaldi.domain.interactors.signOutInteractor.SignOutInteractorImpl
 import com.mibaldi.presentation.R
 import com.mibaldi.presentation.base.activities.BaseActivity
-import com.mibaldi.presentation.datasources.LoginDataSourceImpl
+import com.mibaldi.presentation.framework.datasources.LoginDataSourceImpl
 import com.mibaldi.presentation.utils.Field
 import com.mibaldi.presentation.ui.main.MainActivity
 import com.mibaldi.presentation.utils.observe

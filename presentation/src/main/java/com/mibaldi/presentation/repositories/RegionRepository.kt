@@ -3,7 +3,7 @@ import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.app.Activity
 import android.location.Geocoder
 import android.location.Location
-import com.mibaldi.presentation.datasources.PlayServicesLocationDataSource
+import com.mibaldi.presentation.framework.datasources.PlayServicesLocationDataSource
 import com.mibaldi.presentation.utils.PermissionChecker
 
 class RegionRepository(activity: Activity) {
@@ -12,7 +12,8 @@ class RegionRepository(activity: Activity) {
         private const val DEFAULT_REGION = "US"
     }
 
-    private val locationDataSource = PlayServicesLocationDataSource(activity)
+    private val locationDataSource =
+        PlayServicesLocationDataSource(activity)
     private val coarsePermissionChecker = PermissionChecker(activity, ACCESS_COARSE_LOCATION)
     private val geocoder = Geocoder(activity)
 

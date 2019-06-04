@@ -1,4 +1,4 @@
-package com.mibaldi.presentation.datasources
+package com.mibaldi.presentation.framework.datasources
 
 import android.net.Uri
 import android.util.Log
