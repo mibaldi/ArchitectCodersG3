@@ -15,7 +15,7 @@ import com.mibaldi.domain.interactors.signOutInteractor.SignOutInteractor
 import com.mibaldi.domain.interactors.signOutInteractor.SignOutInteractorImpl
 import com.mibaldi.presentation.R
 import com.mibaldi.presentation.base.activities.BaseActivity
-import com.mibaldi.presentation.datasources.LoginDataSourceImpl
+import com.mibaldi.presentation.framework.datasources.LoginDataSourceImpl
 import com.mibaldi.presentation.ui.login.EmailPasswordActivity
 import com.mibaldi.presentation.utils.*
 import kotlinx.android.synthetic.main.activity_main.progress
