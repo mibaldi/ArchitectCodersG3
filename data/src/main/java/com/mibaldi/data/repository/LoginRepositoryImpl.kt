@@ -8,20 +8,21 @@ import com.mibaldi.domain.repository.LoginRepository
 class LoginRepositoryImpl(private val loginDataSource: LoginDataSource) : LoginRepository {
 
 
-
-    override suspend fun signIn(email: String, password: String)  =
-        loginDataSource.signIn(email,password)
+    override suspend fun signIn(email: String, password: String) =
+        loginDataSource.signIn(email, password)
 
     override suspend fun createAccount(email: String, password: String) =
-        loginDataSource.createAccount(email,password)
+        loginDataSource.createAccount(email, password)
 
 
-    override fun signOut() {
+    override suspend fun signOut() {
         loginDataSource.signOut()
     }
-    override fun getCurrentUser(): MyFirebaseUser? {
+
+    override suspend fun getCurrentUser(): MyFirebaseUser? {
         return loginDataSource.getCurrentUser()
     }
+
     override suspend fun removeAccount(): Either<String, Boolean> {
         return loginDataSource.removeAccount()
     }

@@ -5,22 +5,18 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mibaldi.data.repository.FirestoreSimpleRepository
+import com.mibaldi.domain.interactors.bar.GetBarInteractor
 import com.mibaldi.presentation.R
 import com.mibaldi.presentation.base.activities.BaseActivity
 import com.mibaldi.presentation.framework.datasources.FirestoreSimpleDataSource
-import com.mibaldi.data.repository.FirestoreSimpleRepository
 import com.mibaldi.presentation.ui.adapters.BarAdapter
 import com.mibaldi.presentation.ui.detail.BarDetailActivity
+import com.mibaldi.presentation.ui.profile.ProfileActivity
 import com.mibaldi.presentation.utils.observe
 import com.mibaldi.presentation.utils.startActivity
 import com.mibaldi.presentation.utils.withViewModel
-import com.mibaldi.domain.interactors.bar.GetBarSimpleInteractor
-import com.mibaldi.presentation.ui.profile.ProfileActivity
 import kotlinx.android.synthetic.main.activity_main.*
-
-
-
-
 
 
 class MainActivity : BaseActivity() {
@@ -33,13 +29,14 @@ class MainActivity : BaseActivity() {
         val firestoreDataSource =
             FirestoreSimpleDataSource(FirebaseFirestore.getInstance())
         val repository = FirestoreSimpleRepository(firestoreDataSource)
-        val getBarInteractor = GetBarSimpleInteractor(repository)
+        val getBarInteractor = GetBarInteractor(repository)
         viewModel = withViewModel({ MainViewModel(getBarInteractor) }) {
             observe(model, ::updateUI)
         }
         adapter = BarAdapter(viewModel::onBarClicked)
         recycler.adapter = adapter
     }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return true
