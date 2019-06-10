@@ -4,19 +4,15 @@ import android.os.Bundle
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import com.mibaldi.data.repository.LoginRepositoryImpl
-import com.mibaldi.domain.interactors.createAccountInteractor.CreateAccountInteractor
-import com.mibaldi.domain.interactors.createAccountInteractor.CreateAccountInteractorImpl
-import com.mibaldi.domain.interactors.getCurrentUserInteractor.GetCurrentUserInteractor
-import com.mibaldi.domain.interactors.getCurrentUserInteractor.GetCurrentUserInteractorImpl
-import com.mibaldi.domain.interactors.signInInteractor.SignInInteractor
-import com.mibaldi.domain.interactors.signInInteractor.SignInInteractorImpl
-import com.mibaldi.domain.interactors.signOutInteractor.SignOutInteractor
-import com.mibaldi.domain.interactors.signOutInteractor.SignOutInteractorImpl
+import com.mibaldi.domain.interactors.account.CreateAccountInteractor
+import com.mibaldi.domain.interactors.user.GetCurrentUserInteractor
+import com.mibaldi.domain.interactors.login.SignInInteractor
+import com.mibaldi.domain.interactors.login.SignOutInteractor
 import com.mibaldi.presentation.R
 import com.mibaldi.presentation.base.activities.BaseActivity
 import com.mibaldi.presentation.framework.datasources.LoginDataSourceImpl
-import com.mibaldi.presentation.utils.Field
 import com.mibaldi.presentation.ui.main.MainActivity
+import com.mibaldi.presentation.utils.Field
 import com.mibaldi.presentation.utils.observe
 import com.mibaldi.presentation.utils.startActivity
 import com.mibaldi.presentation.utils.withViewModel
@@ -36,10 +32,12 @@ class EmailPasswordActivity : BaseActivity() {
         initInteractors()
         viewModel = withViewModel(
             {
-                EmailPasswordViewModel(signInInteractor,
+                EmailPasswordViewModel(
+                    signInInteractor,
                     getCurrentUserInteractor,
                     createAccountInteractor,
-                    signOutInteractor)
+                    signOutInteractor
+                )
             }) {
             observe(model, ::updateUI)
         }
@@ -56,10 +54,10 @@ class EmailPasswordActivity : BaseActivity() {
 
     private fun initInteractors() {
         val loginRepository = LoginRepositoryImpl(LoginDataSourceImpl)
-        getCurrentUserInteractor = GetCurrentUserInteractorImpl(loginRepository)
-        createAccountInteractor = CreateAccountInteractorImpl(loginRepository)
-        signInInteractor = SignInInteractorImpl(loginRepository)
-        signOutInteractor = SignOutInteractorImpl(loginRepository)
+        getCurrentUserInteractor = GetCurrentUserInteractor(loginRepository)
+        createAccountInteractor = CreateAccountInteractor(loginRepository)
+        signInInteractor = SignInInteractor(loginRepository)
+        signOutInteractor = SignOutInteractor(loginRepository)
     }
 
     private fun updateUI(model: EmailPasswordViewModel.UiModel) {
@@ -73,7 +71,7 @@ class EmailPasswordActivity : BaseActivity() {
                     is Field.Password -> fieldPassword.error = model.field.error
                 }
             }
-            is EmailPasswordViewModel.UiModel.Navigation -> startActivity<MainActivity> { finish()}
+            is EmailPasswordViewModel.UiModel.Navigation -> startActivity<MainActivity> { finish() }
             is EmailPasswordViewModel.UiModel.Loading -> {
                 if (model.show) showProgressDialog() else hideProgressDialog()
             }

@@ -5,9 +5,9 @@ import com.mibaldi.domain.entity.MyFirebaseUser
 
 interface LoginRepository : BaseRepository {
 
-    suspend fun signIn(email:String,password:String) : Either<String, Boolean>
-    suspend fun createAccount(email:String,password:String): Either<String,Boolean>
-    fun signOut()
-    fun getCurrentUser() : MyFirebaseUser?
+    suspend fun signIn(email: String, password: String): Either<String, Boolean>
+    suspend fun createAccount(email: String, password: String): Either<String, Boolean>
+    suspend fun signOut()
+    suspend fun getCurrentUser(): MyFirebaseUser?
     suspend fun removeAccount(): Either<String, Boolean>
 }

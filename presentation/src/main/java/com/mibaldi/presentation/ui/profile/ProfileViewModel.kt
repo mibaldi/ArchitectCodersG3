@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mibaldi.domain.entity.MyFirebaseUser
+import com.mibaldi.domain.interactors.account.RemoveAccountInteractor
+import com.mibaldi.domain.interactors.login.SignOutInteractor
+import com.mibaldi.domain.interactors.user.GetCurrentUserInteractor
 import com.mibaldi.presentation.ui.common.Scope
-import com.mibaldi.domain.interactors.getCurrentUserInteractor.GetCurrentUserInteractor
-import com.mibaldi.domain.interactors.removeAccountInteractor.RemoveAccountInteractor
-import com.mibaldi.domain.interactors.signOutInteractor.SignOutInteractor
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
@@ -42,16 +42,19 @@ class ProfileViewModel(
     }
 
     fun logout() {
-        signOutInteractor.signOut()
-        _model.value = UiModel.Navigation
+        launch {
+            signOutInteractor.signOut()
+            _model.value = UiModel.Navigation
+        }
     }
 
     fun removeAccount() {
         launch {
             _model.value = UiModel.Loading
-            removeAccountInteractor.removeAccount().either(::handleFailure,::handleSuccess)
+            removeAccountInteractor.removeAccount().either(::handleFailure, ::handleSuccess)
         }
     }
+
     private fun handleSuccess(signInResult: Boolean) {
         _model.value = UiModel.Navigation
     }

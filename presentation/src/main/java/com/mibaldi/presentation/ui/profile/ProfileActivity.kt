@@ -8,16 +8,17 @@ import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import com.mibaldi.data.repository.LoginRepositoryImpl
 import com.mibaldi.domain.entity.MyFirebaseUser
-import com.mibaldi.domain.interactors.getCurrentUserInteractor.GetCurrentUserInteractor
-import com.mibaldi.domain.interactors.getCurrentUserInteractor.GetCurrentUserInteractorImpl
-import com.mibaldi.domain.interactors.removeAccountInteractor.RemoveAccountInteractor
-import com.mibaldi.domain.interactors.signOutInteractor.SignOutInteractor
-import com.mibaldi.domain.interactors.signOutInteractor.SignOutInteractorImpl
+import com.mibaldi.domain.interactors.account.RemoveAccountInteractor
+import com.mibaldi.domain.interactors.user.GetCurrentUserInteractor
+import com.mibaldi.domain.interactors.login.SignOutInteractor
 import com.mibaldi.presentation.R
 import com.mibaldi.presentation.base.activities.BaseActivity
 import com.mibaldi.presentation.framework.datasources.LoginDataSourceImpl
 import com.mibaldi.presentation.ui.login.EmailPasswordActivity
-import com.mibaldi.presentation.utils.*
+import com.mibaldi.presentation.utils.loadUrl
+import com.mibaldi.presentation.utils.observe
+import com.mibaldi.presentation.utils.startActivity
+import com.mibaldi.presentation.utils.withViewModel
 import kotlinx.android.synthetic.main.activity_main.progress
 import kotlinx.android.synthetic.main.activity_profile.*
 
@@ -35,12 +36,13 @@ class ProfileActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val loginRepository = LoginRepositoryImpl(LoginDataSourceImpl)
-        getCurrentUserInteractor = GetCurrentUserInteractorImpl(loginRepository)
-        signOutInteractor = SignOutInteractorImpl(loginRepository)
+        getCurrentUserInteractor = GetCurrentUserInteractor(loginRepository)
+        signOutInteractor = SignOutInteractor(loginRepository)
         removeAccountInteractor = RemoveAccountInteractor(loginRepository)
-        viewModel = withViewModel({ ProfileViewModel(getCurrentUserInteractor,signOutInteractor,removeAccountInteractor) }) {
-            observe(model, ::updateUI)
-        }
+        viewModel =
+            withViewModel({ ProfileViewModel(getCurrentUserInteractor, signOutInteractor, removeAccountInteractor) }) {
+                observe(model, ::updateUI)
+            }
         btnLogout.setOnClickListener {
             viewModel.logout()
         }
@@ -52,7 +54,7 @@ class ProfileActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId){
+        return when (item?.itemId) {
             R.id.menuRemove -> {
                 viewModel.removeAccount()
                 true
@@ -60,6 +62,7 @@ class ProfileActivity : BaseActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
     private fun updateUI(model: ProfileViewModel.UiModel) {
         progress.visibility = if (model is ProfileViewModel.UiModel.Loading) View.VISIBLE else View.GONE
 
@@ -78,7 +81,7 @@ class ProfileActivity : BaseActivity() {
     }
 
     private fun showError(errorString: String) {
-        Snackbar.make(coordinatorLayout,errorString,Snackbar.LENGTH_LONG).show()
+        Snackbar.make(coordinatorLayout, errorString, Snackbar.LENGTH_LONG).show()
     }
 
     private fun setupUser(myFirebaseUser: MyFirebaseUser) {
