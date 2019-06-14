@@ -3,9 +3,11 @@ package com.mibaldi.presentation.application
 import android.app.Application
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mibaldi.data.datasource.FirestoreDataSource
+import com.mibaldi.data.datasource.LocationDataSource
 import com.mibaldi.data.datasource.LoginDataSource
 import com.mibaldi.data.repository.FirestoreSimpleRepository
 import com.mibaldi.data.repository.LoginRepositoryImpl
+import com.mibaldi.data.repository.PermissionChecker
 import com.mibaldi.domain.interactors.account.CreateAccountInteractor
 import com.mibaldi.domain.interactors.account.RemoveAccountInteractor
 import com.mibaldi.domain.interactors.bar.GetBarInteractor
@@ -17,14 +19,18 @@ import com.mibaldi.domain.repository.LoginRepository
 import com.mibaldi.presentation.data.model.BarView
 import com.mibaldi.presentation.framework.datasources.FirestoreSimpleDataSource
 import com.mibaldi.presentation.framework.datasources.LoginDataSourceImpl
+import com.mibaldi.presentation.framework.datasources.PlayServicesLocationDataSource
 import com.mibaldi.presentation.ui.detail.BarDetailActivity
 import com.mibaldi.presentation.ui.detail.BarDetailViewModel
 import com.mibaldi.presentation.ui.login.EmailPasswordActivity
 import com.mibaldi.presentation.ui.login.EmailPasswordViewModel
 import com.mibaldi.presentation.ui.main.MainActivity
 import com.mibaldi.presentation.ui.main.MainViewModel
+import com.mibaldi.presentation.ui.map.MapsActivity
+import com.mibaldi.presentation.ui.map.MapsViewModel
 import com.mibaldi.presentation.ui.profile.ProfileActivity
 import com.mibaldi.presentation.ui.profile.ProfileViewModel
+import com.mibaldi.presentation.utils.AndroidPermissionChecker
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.android.viewmodel.dsl.viewModel
@@ -44,6 +50,8 @@ private val appModule = module {
     factory<LoginDataSource> { LoginDataSourceImpl }
     factory<FirestoreDataSource> { FirestoreSimpleDataSource(get()) }
     factory { FirebaseFirestore.getInstance() }
+    factory<LocationDataSource> { PlayServicesLocationDataSource(get()) }
+    factory<PermissionChecker> { AndroidPermissionChecker(get()) }
 }
 
 private val dataModule = module {
@@ -61,6 +69,10 @@ private val scopesModule = module {
     }
     scope(named<MainActivity>()) {
         viewModel { MainViewModel(get()) }
+        scoped { GetBarInteractor(get()) }
+    }
+    scope(named<MapsActivity>()) {
+        viewModel { MapsViewModel(get()) }
         scoped { GetBarInteractor(get()) }
     }
     scope(named<BarDetailActivity>()) {

@@ -51,6 +51,10 @@ class MainActivity : BaseActivity() {
                 viewModel.goToProfile()
                 true
             }
+            R.id.menuMap -> {
+                viewModel.goToMap()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
