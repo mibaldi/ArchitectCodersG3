@@ -18,14 +18,12 @@ import com.mibaldi.presentation.ui.common.Navigator
 import com.mibaldi.presentation.utils.observe
 import com.mibaldi.presentation.utils.withViewModel
 import kotlinx.android.synthetic.main.activity_email_password.*
+import org.koin.android.scope.currentScope
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class EmailPasswordActivity : BaseActivity() {
-    private lateinit var viewModel: EmailPasswordViewModel
-    private lateinit var createAccountInteractor: CreateAccountInteractor
-    private lateinit var getCurrentUserInteractor: GetCurrentUserInteractor
-    private lateinit var signInInteractor: SignInInteractor
-    private lateinit var signOutInteractor: SignOutInteractor
 
+    private val viewModel: EmailPasswordViewModel by currentScope.viewModel(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

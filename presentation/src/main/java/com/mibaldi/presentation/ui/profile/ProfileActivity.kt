@@ -18,18 +18,20 @@ import com.mibaldi.presentation.databinding.ActivityProfileBinding
 import com.mibaldi.presentation.framework.datasources.LoginDataSourceImpl
 import com.mibaldi.presentation.ui.common.Navigator
 import com.mibaldi.presentation.ui.login.EmailPasswordActivity
+import com.mibaldi.presentation.ui.main.MainViewModel
 import com.mibaldi.presentation.utils.loadUrl
 import com.mibaldi.presentation.utils.observe
 import com.mibaldi.presentation.utils.startActivity
 import com.mibaldi.presentation.utils.withViewModel
 import kotlinx.android.synthetic.main.activity_main.progress
 import kotlinx.android.synthetic.main.activity_profile.*
+import org.koin.android.scope.currentScope
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class ProfileActivity : BaseActivity() {
-    private lateinit var viewModel: ProfileViewModel
-    private lateinit var getCurrentUserInteractor: GetCurrentUserInteractor
-    private lateinit var signOutInteractor: SignOutInteractor
-    private lateinit var removeAccountInteractor: RemoveAccountInteractor
+
+    private val viewModel: ProfileViewModel by currentScope.viewModel(this)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
