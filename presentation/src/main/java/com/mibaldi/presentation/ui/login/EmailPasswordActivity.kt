@@ -2,6 +2,7 @@ package com.mibaldi.presentation.ui.login
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.mibaldi.data.repository.LoginRepositoryImpl
 import com.mibaldi.domain.interactors.account.CreateAccountInteractor
@@ -17,30 +18,17 @@ import com.mibaldi.presentation.utils.observe
 import com.mibaldi.presentation.utils.startActivity
 import com.mibaldi.presentation.utils.withViewModel
 import kotlinx.android.synthetic.main.activity_email_password.*
+import org.koin.android.scope.currentScope
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class EmailPasswordActivity : BaseActivity() {
-    private lateinit var viewModel: EmailPasswordViewModel
-    private lateinit var createAccountInteractor: CreateAccountInteractor
-    private lateinit var getCurrentUserInteractor: GetCurrentUserInteractor
-    private lateinit var signInInteractor: SignInInteractor
-    private lateinit var signOutInteractor: SignOutInteractor
 
+    private val viewModel: EmailPasswordViewModel by currentScope.viewModel(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_email_password)
-        initInteractors()
-        viewModel = withViewModel(
-            {
-                EmailPasswordViewModel(
-                    signInInteractor,
-                    getCurrentUserInteractor,
-                    createAccountInteractor,
-                    signOutInteractor
-                )
-            }) {
-            observe(model, ::updateUI)
-        }
+        viewModel.model.observe(this, Observer(::updateUI))
         emailSignInButton.setOnClickListener {
             viewModel::signIn.invoke(fieldEmail.text.toString(), fieldPassword.text.toString())
         }
@@ -50,14 +38,6 @@ class EmailPasswordActivity : BaseActivity() {
         signOutButton.setOnClickListener {
             viewModel::signOut.invoke()
         }
-    }
-
-    private fun initInteractors() {
-        val loginRepository = LoginRepositoryImpl(LoginDataSourceImpl)
-        getCurrentUserInteractor = GetCurrentUserInteractor(loginRepository)
-        createAccountInteractor = CreateAccountInteractor(loginRepository)
-        signInInteractor = SignInInteractor(loginRepository)
-        signOutInteractor = SignOutInteractor(loginRepository)
     }
 
     private fun updateUI(model: EmailPasswordViewModel.UiModel) {
