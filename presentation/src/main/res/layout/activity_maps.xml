@@ -20,7 +20,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:weightSum="6"
             tools:visibility="visible"
-            android:visibility="visible">
+            android:visibility="gone">
         <ImageView
                 android:id="@+id/ivBar"
                 android:layout_width="0dp"

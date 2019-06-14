@@ -88,18 +88,20 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     }
 
     private fun hideFooter() {
-        val slideDown = AnimationUtils.loadAnimation(
-            applicationContext,
-            R.anim.slide_down
-        )
-        slideDown.setAnimationListener(object : MyAnimationListener {
-            override fun onAnimationEnd(animation: Animation?) {
-                llFooter.visibility = View.GONE
-                ivBar.setImageDrawable(getDrawable(R.mipmap.ic_launcher))
-                tvBar.text = ""
-            }
-        })
-        llFooter.startAnimation(slideDown)
+        if (llFooter.visibility != View.GONE) {
+            val slideDown = AnimationUtils.loadAnimation(
+                applicationContext,
+                R.anim.slide_down
+            )
+            slideDown.setAnimationListener(object : MyAnimationListener {
+                override fun onAnimationEnd(animation: Animation?) {
+                    llFooter.visibility = View.GONE
+                    ivBar.setImageDrawable(getDrawable(R.mipmap.ic_launcher))
+                    tvBar.text = ""
+                }
+            })
+            llFooter.startAnimation(slideDown)
+        }
     }
 
 
@@ -137,6 +139,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     }
     override fun onMarkerClick(marker: Marker): Boolean {
         marker.showInfoWindow()
+
         viewModel.clickOnBar(marker.position)
         return true
     }
