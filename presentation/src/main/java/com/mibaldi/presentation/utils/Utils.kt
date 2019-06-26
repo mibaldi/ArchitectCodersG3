@@ -25,18 +25,15 @@ fun <T : Any, L : LiveData<T>> LifecycleOwner.observe(liveData: L, body: (T) -> 
 }
 
 fun AppCompatActivity.loadJSONFromAsset(): String {
-    var json: String? = null
-    try {
+    return try {
         val inputStream = assets.open("mock1.json")
         val size = inputStream.available()
         val buffer = ByteArray(size)
         inputStream.read(buffer)
         inputStream.close()
-        json = String(buffer, Charset.defaultCharset())
+        String(buffer, Charset.defaultCharset())
     } catch (ex: IOException) {
         ex.printStackTrace()
-        return ""
+        ""
     }
-
-    return json
 }

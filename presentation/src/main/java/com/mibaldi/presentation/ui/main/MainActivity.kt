@@ -3,20 +3,17 @@ package com.mibaldi.presentation.ui.main
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import androidx.databinding.DataBindingUtil
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mibaldi.data.repository.FirestoreSimpleRepository
 import com.mibaldi.domain.interactors.bar.GetBarInteractor
 import com.mibaldi.presentation.R
 import com.mibaldi.presentation.base.activities.BaseActivity
+import com.mibaldi.presentation.databinding.ActivityMainBinding
 import com.mibaldi.presentation.framework.datasources.FirestoreSimpleDataSource
 import com.mibaldi.presentation.ui.adapters.BarAdapter
-import com.mibaldi.presentation.ui.detail.BarDetailActivity
-import com.mibaldi.presentation.ui.profile.ProfileActivity
-import com.mibaldi.presentation.utils.observe
-import com.mibaldi.presentation.utils.startActivity
-import com.mibaldi.presentation.utils.withViewModel
-import kotlinx.android.synthetic.main.activity_main.*
+import com.mibaldi.presentation.ui.common.Navigator
+import com.mibaldi.presentation.utils.getViewModel
 
 
 class MainActivity : BaseActivity() {
@@ -25,16 +22,22 @@ class MainActivity : BaseActivity() {
     private lateinit var adapter: BarAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         val firestoreDataSource =
             FirestoreSimpleDataSource(FirebaseFirestore.getInstance())
         val repository = FirestoreSimpleRepository(firestoreDataSource)
         val getBarInteractor = GetBarInteractor(repository)
-        viewModel = withViewModel({ MainViewModel(getBarInteractor) }) {
-            observe(model, ::updateUI)
-        }
+        val navigator = Navigator(this)
+        viewModel = getViewModel { MainViewModel(getBarInteractor, navigator) }
+
+
+        val binding: ActivityMainBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_main)
+
+        binding.model = viewModel
+        binding.lifecycleOwner = this
+
         adapter = BarAdapter(viewModel::onBarClicked)
-        recycler.adapter = adapter
+        binding.recycler.adapter = adapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -52,16 +55,4 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun updateUI(model: MainViewModel.UiModel) {
-        progress.visibility = if (model is MainViewModel.UiModel.Loading) View.VISIBLE else View.GONE
-
-        when (model) {
-            is MainViewModel.UiModel.Content -> adapter.bars = model.bars
-            is MainViewModel.UiModel.Navigation -> startActivity<BarDetailActivity> {
-                putExtra(BarDetailActivity.BEER, model.bar)
-            }
-            is MainViewModel.UiModel.NavigationProfile -> startActivity<ProfileActivity> {}
-        }
-
-    }
 }

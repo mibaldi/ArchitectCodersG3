@@ -1,4 +1,5 @@
 package com.mibaldi.presentation.ui.adapters
+
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,9 +10,9 @@ import com.mibaldi.presentation.utils.inflate
 import kotlinx.android.synthetic.main.view_beer.view.*
 
 class BarAdapter(private val listener: (BarView) -> Unit) :
-    RecyclerView.Adapter<BarAdapter.ViewHolder>() {
+    RecyclerView.Adapter<BarAdapter.ViewHolder>(), BindableAdapter<List<BarView>> {
 
-    var bars: List<BarView> by basicDiffUtil(
+    override var data: List<BarView> by basicDiffUtil(
         emptyList(),
         areItemsTheSame = { old, new -> old.id == new.id }
     )
@@ -21,10 +22,10 @@ class BarAdapter(private val listener: (BarView) -> Unit) :
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = bars.size
+    override fun getItemCount(): Int = data.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val bars = bars[position]
+        val bars = data[position]
         holder.bind(bars)
         holder.itemView.setOnClickListener { listener(bars) }
     }
