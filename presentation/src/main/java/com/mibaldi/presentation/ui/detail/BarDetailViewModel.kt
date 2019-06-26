@@ -3,16 +3,15 @@ package com.mibaldi.presentation.ui.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mibaldi.presentation.base.viewmodel.BaseViewModel
 import com.mibaldi.presentation.data.model.BarView
 
-class BarDetailViewModel(private val barView: BarView) : ViewModel() {
+class BarDetailViewModel(private val barView: BarView) : BaseViewModel() {
 
-    class UiModel(val barView: BarView)
-
-    private val _model = MutableLiveData<UiModel>()
-    val model: LiveData<UiModel>
+    private val _data = MutableLiveData<BarView>()
+    val data: LiveData<BarView>
         get() {
-            if (_model.value == null) _model.value = UiModel(barView)
-            return _model
+            if (_data.value == null) _data.value = barView
+            return _data
         }
 }
