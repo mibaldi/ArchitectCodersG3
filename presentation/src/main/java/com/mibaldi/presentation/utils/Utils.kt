@@ -20,7 +20,7 @@ fun myLog(tag: String, msg: String) {
 val isDebugMode = BuildConfig.DEBUG
 
 
-fun <T : Any, L : LiveData<T>> LifecycleOwner.observe(liveData: L, body: (T) -> Unit) {
+fun <T, L : LiveData<T>> LifecycleOwner.observe(liveData: L, body: (T) -> Unit) {
     liveData.observe(this, Observer(body))
 }
 

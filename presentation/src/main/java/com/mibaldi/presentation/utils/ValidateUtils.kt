@@ -3,9 +3,9 @@ package com.mibaldi.presentation.utils
 import android.text.TextUtils
 import android.util.Patterns
 
-sealed class Field {
-    class Email(val error:String?) : Field()
-    class Password(val error:String?): Field()
+sealed class Field ( val error: String?) {
+    class Email(error2:String?) : Field(error2)
+    class Password(error2:String?): Field(error2)
 }
 
 
