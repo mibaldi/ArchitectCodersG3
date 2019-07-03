@@ -1,5 +1,6 @@
 package com.mibaldi.presentation.ui.map
 
+import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,17 +10,27 @@ import com.mibaldi.domain.entity.Bar
 import com.mibaldi.domain.interactors.bar.GetBarInteractor
 import com.mibaldi.presentation.data.model.BarView
 import com.mibaldi.presentation.data.model.toBarView
+import com.mibaldi.presentation.ui.common.Navigator
 import com.mibaldi.presentation.ui.common.Scope
 import kotlinx.coroutines.launch
 
-class MapsViewModel(private val barInteractor: GetBarInteractor) : ViewModel(), Scope by Scope.Impl() {
-    private val _model = MutableLiveData<UiModel>()
+class MapsViewModel(private val navigator: Navigator,private val barInteractor: GetBarInteractor) : ViewModel(), Scope by Scope.Impl() {
     private var results: List<Bar> = listOf()
-    val model: LiveData<UiModel>
+
+    private val _bars = MutableLiveData<List<BarView>>()
+    val bars: LiveData<List<BarView>>
         get() {
-            if (_model.value == null) refresh()
-            return _model
+            if (_bars.value == null) refresh()
+            return _bars
         }
+    private val _dataLoading = MutableLiveData<Boolean>()
+    val dataLoading: LiveData<Boolean>
+        get() = _dataLoading
+
+    private val _footer = MutableLiveData<BarView?>()
+    val footer: LiveData<BarView?>
+        get() = _footer
+
     init {
 
         initScope()
@@ -27,9 +38,10 @@ class MapsViewModel(private val barInteractor: GetBarInteractor) : ViewModel(), 
 
     private fun refresh() {
         launch {
-            _model.value = UiModel.Loading
+            _dataLoading.value = true
             results = barInteractor.getAllBars()
-            _model.value = UiModel.Content(results.map { it.toBarView() })
+            _bars.value = results.map { it.toBarView() }
+            _dataLoading.value = false
         }
     }
 
@@ -43,23 +55,15 @@ class MapsViewModel(private val barInteractor: GetBarInteractor) : ViewModel(), 
             it.address.lat == position?.latitude
         }
         bar?.let {
-            _model.value = UiModel.Footer(it.toBarView())
+            _footer.value = bar.toBarView()
         }
     }
 
     fun onMapClick() {
-        _model.value = UiModel.HideFooter
+        _footer.value = null
     }
 
     fun onFooterClicked(bar: BarView) {
-        _model.value = UiModel.Navigation(bar)
-    }
-
-    sealed class UiModel {
-        object Loading : UiModel()
-        object HideFooter : UiModel()
-        class Content(val bars: List<BarView>) : UiModel()
-        class Footer(val bar: BarView): UiModel()
-        class Navigation(val bar:BarView):UiModel()
+        navigator.goToDetail(bar)
     }
 }

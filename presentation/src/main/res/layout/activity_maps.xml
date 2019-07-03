@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   xmlns:tools="http://schemas.android.com/tools"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="match_parent"
-                                                   tools:context=".ui.map.MapsActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <fragment android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:id="@+id/map"
-              android:name="com.google.android.gms.maps.SupportMapFragment"/>
-    <LinearLayout
+    <data>
+
+        <variable
+            name="model"
+            type="com.mibaldi.presentation.ui.map.MapsViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"/>
+        <!--
+        <LinearLayout
             android:id="@+id/llFooter"
             android:background="@android:color/white"
             android:layout_width="match_parent"
@@ -20,18 +28,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:weightSum="6"
             tools:visibility="visible"
-            android:visibility="gone">
-        <ImageView
+            app:visible="@{model.footerVisibility}">
+            <ImageView
                 android:id="@+id/ivBar"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"/>
-        <LinearLayout
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="4"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-            <TextView
+                <TextView
                     android:id="@+id/tvBar"
                     android:gravity="center"
                     android:layout_width="match_parent"
@@ -39,10 +47,10 @@
                     android:textSize="30sp"
                     android:text="Bar name"/>
 
-        </LinearLayout>
+            </LinearLayout>
 
-    </LinearLayout>
-    <ProgressBar
+        </LinearLayout>-->
+        <ProgressBar
             android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,8 +58,11 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            app:visible="@{model.dataLoading}"
             app:layout_constraintBottom_toBottomOf="@+id/map"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

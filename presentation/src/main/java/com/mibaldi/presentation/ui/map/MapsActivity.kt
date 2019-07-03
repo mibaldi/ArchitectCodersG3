@@ -1,12 +1,14 @@
 package com.mibaldi.presentation.ui.map
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
-import android.view.animation.Animation
-import androidx.lifecycle.Observer
-
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -14,17 +16,20 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.firestore.FirebaseFirestore
+import com.mibaldi.data.repository.FirestoreSimpleRepository
+import com.mibaldi.domain.interactors.bar.GetBarInteractor
 import com.mibaldi.presentation.R
 import com.mibaldi.presentation.base.activities.BaseActivity
 import com.mibaldi.presentation.data.model.BarView
+import com.mibaldi.presentation.databinding.ActivityMapsBindingImpl
+import com.mibaldi.presentation.framework.datasources.FirestoreSimpleDataSource
+import com.mibaldi.presentation.ui.common.Navigator
 import com.mibaldi.presentation.utils.PermissionRequester
 import com.mibaldi.presentation.utils.loadUrl
-import kotlinx.android.synthetic.main.activity_maps.*
-import org.koin.android.scope.currentScope
-import org.koin.android.viewmodel.ext.android.viewModel
-import android.view.animation.AnimationUtils
-import com.mibaldi.presentation.ui.detail.BarDetailActivity
-import com.mibaldi.presentation.utils.startActivity
+import com.mibaldi.presentation.utils.observe
+import com.mibaldi.presentation.utils.withViewModel
 
 
 class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -32,20 +37,50 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
     private lateinit var mMap: GoogleMap
     private val coarsePermissionRequester = PermissionRequester(this, ACCESS_COARSE_LOCATION)
-    private val viewModel: MapsViewModel by currentScope.viewModel(this)
+    private lateinit var viewModel: MapsViewModel
+    private lateinit var bottomSheetDialog : MapDialogFooter
+
+
     val ZOOM_LEVEL = 13f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps)
-        hideFooter()
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        viewModel.model.observe(this,Observer(::updateUI))
+        val firestoreDataSource =
+            FirestoreSimpleDataSource(FirebaseFirestore.getInstance())
+        val repository = FirestoreSimpleRepository(firestoreDataSource)
+        val getBarInteractor = GetBarInteractor(repository)
+        viewModel = withViewModel(
+            {
+                MapsViewModel(
+                    Navigator(this),
+                    getBarInteractor
+                )
+            }) {
+            observe(bars,::refresh)
+            observe(footer,::showFooter)
+        }
+
+        val binding: ActivityMapsBindingImpl =
+            DataBindingUtil.setContentView(this, R.layout.activity_maps)
+
+        binding.model = viewModel
+        binding.lifecycleOwner = this
+        bottomSheetDialog = MapDialogFooter(this,viewModel)
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
     }
+    private fun showFooter(bar: BarView?){
+        bar?.let {
+            bottomSheetDialog.bindBar()
+            bottomSheetDialog.show()
+        } ?: bottomSheetDialog.hide()
+
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             android.R.id.home -> {
@@ -58,11 +93,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         coarsePermissionRequester.request {
             if (it) {
                 mMap.isMyLocationEnabled = true
@@ -71,58 +101,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         mMap.setOnMapClickListener {
             viewModel.onMapClick()
         }
-
-    }
-
-    private fun updateUI(model: MapsViewModel.UiModel){
-        progress.visibility = if (model is MapsViewModel.UiModel.Loading) View.VISIBLE else View.GONE
-
-        when (model){
-            is  MapsViewModel.UiModel.Content -> refresh(model.bars)
-            is MapsViewModel.UiModel.Footer -> showFooter(model.bar)
-            is MapsViewModel.UiModel.HideFooter -> hideFooter()
-            is MapsViewModel.UiModel.Navigation -> startActivity<BarDetailActivity> {
-                putExtra(BarDetailActivity.BEER, model.bar)
-            }
-        }
-    }
-
-    private fun hideFooter() {
-        if (llFooter.visibility != View.GONE) {
-            val slideDown = AnimationUtils.loadAnimation(
-                applicationContext,
-                R.anim.slide_down
-            )
-            slideDown.setAnimationListener(object : MyAnimationListener {
-                override fun onAnimationEnd(animation: Animation?) {
-                    llFooter.visibility = View.GONE
-                    ivBar.setImageDrawable(getDrawable(R.mipmap.ic_launcher))
-                    tvBar.text = ""
-                }
-            })
-            llFooter.startAnimation(slideDown)
-        }
-    }
-
-
-
-    private fun showFooter(bar: BarView) {
-        val slideUp = AnimationUtils.loadAnimation(
-            applicationContext,
-            R.anim.slide_up
-        )
-        slideUp.setAnimationListener(object : MyAnimationListener {
-            override fun onAnimationStart(animation: Animation?) {
-                llFooter.visibility = View.VISIBLE
-                ivBar.loadUrl(bar.photo)
-                tvBar.text = bar.name
-            }
-        })
-        llFooter.setOnClickListener {
-            viewModel.onFooterClicked(bar)
-        }
-        llFooter.startAnimation(slideUp)
-
 
     }
 
@@ -139,7 +117,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     }
     override fun onMarkerClick(marker: Marker): Boolean {
         marker.showInfoWindow()
-
         viewModel.clickOnBar(marker.position)
         return true
     }
@@ -152,8 +129,26 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     }
 
 }
-interface MyAnimationListener: Animation.AnimationListener {
-    override fun onAnimationEnd(animation: Animation?) {}
-    override fun onAnimationRepeat(animation: Animation?) {}
-    override fun onAnimationStart(animation: Animation?) {}
+class MapDialogFooter(context: Context,private val viewModel:MapsViewModel) : BottomSheetDialog(context) {
+    init {
+        if (context is Activity) {
+            ownerActivity = context
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(layoutInflater.inflate(R.layout.dialog_map_footer, null))
+    }
+    fun bindBar(){
+        viewModel.footer.value?.let {barView ->
+            findViewById<ImageView>(R.id.ivBar)?.loadUrl(barView.photo)
+            findViewById<TextView>(R.id.tvBar)?.text = barView.name
+            findViewById<LinearLayout>(R.id.llFooter)?.setOnClickListener {
+                viewModel.onFooterClicked(barView)
+            }
+        }
+    }
+
+
 }

@@ -6,6 +6,7 @@ import com.mibaldi.presentation.data.model.BarView
 import com.mibaldi.presentation.ui.detail.BarDetailActivity
 import com.mibaldi.presentation.ui.login.EmailPasswordActivity
 import com.mibaldi.presentation.ui.main.MainActivity
+import com.mibaldi.presentation.ui.map.MapsActivity
 import com.mibaldi.presentation.ui.profile.ProfileActivity
 import com.mibaldi.presentation.utils.startActivity
 
@@ -28,5 +29,9 @@ class Navigator(private val activity: AppCompatActivity) {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
             activity.finish()
         }
+    }
+
+    fun goToMap() {
+        activity.startActivity<MapsActivity> {}
     }
 }

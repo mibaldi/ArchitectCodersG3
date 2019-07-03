@@ -30,8 +30,10 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class ProfileActivity : BaseActivity() {
 
-    private val viewModel: ProfileViewModel by currentScope.viewModel(this)
-
+    private lateinit var viewModel: ProfileViewModel
+    private lateinit var getCurrentUserInteractor: GetCurrentUserInteractor
+    private lateinit var signOutInteractor: SignOutInteractor
+    private lateinit var removeAccountInteractor: RemoveAccountInteractor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

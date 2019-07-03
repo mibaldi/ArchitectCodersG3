@@ -23,7 +23,11 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class EmailPasswordActivity : BaseActivity() {
 
-    private val viewModel: EmailPasswordViewModel by currentScope.viewModel(this)
+    private lateinit var viewModel: EmailPasswordViewModel
+    private lateinit var createAccountInteractor: CreateAccountInteractor
+    private lateinit var getCurrentUserInteractor: GetCurrentUserInteractor
+    private lateinit var signInInteractor: SignInInteractor
+    private lateinit var signOutInteractor: SignOutInteractor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
