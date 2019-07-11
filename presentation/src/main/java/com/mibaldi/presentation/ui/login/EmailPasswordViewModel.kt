@@ -6,7 +6,6 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mibaldi.domain.entity.MyFirebaseUser
 import com.mibaldi.domain.interactors.account.CreateAccountInteractor
 import com.mibaldi.domain.interactors.login.SignInInteractor
 import com.mibaldi.domain.interactors.login.SignOutInteractor
@@ -30,6 +29,8 @@ class EmailPasswordViewModel(
     var passwordField: ObservableField<String> = ObservableField("")
     var signedInButtons: ObservableBoolean = ObservableBoolean(false)
 
+    val user = MutableLiveData<Boolean>()
+
     private val _dataLoading = MutableLiveData<Boolean>()
     val dataLoading: LiveData<Boolean>
         get() = _dataLoading
@@ -44,8 +45,6 @@ class EmailPasswordViewModel(
     private val _validateFormPassword = MutableLiveData<Field>()
     val validateFormPassword: LiveData<Field>
         get() = _validateFormPassword
-
-
 
 
     init {
@@ -71,7 +70,7 @@ class EmailPasswordViewModel(
         val email = emailField.get() ?: ""
         val password = passwordField.get() ?: ""
         Log.d("EmailPassword", "signIn:$email")
-        if (!validateForm(email,password)) {
+        if (!validateForm(email, password)) {
             return
         }
         launch {
