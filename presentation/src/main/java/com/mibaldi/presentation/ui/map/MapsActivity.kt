@@ -34,12 +34,10 @@ import com.mibaldi.presentation.utils.withViewModel
 
 class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
-
     private lateinit var mMap: GoogleMap
     private val coarsePermissionRequester = PermissionRequester(this, ACCESS_COARSE_LOCATION)
     private lateinit var viewModel: MapsViewModel
     private lateinit var bottomSheetDialog : MapDialogFooter
-
 
     val ZOOM_LEVEL = 13f
 
@@ -73,10 +71,10 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         mapFragment.getMapAsync(this)
 
     }
-    private fun showFooter(bar: BarView?){
+    private fun showFooter(bar: BarView?) {
         bar?.let {
-            bottomSheetDialog.bindBar()
-            bottomSheetDialog.show()
+            bottomSheetDialog.bindBar(bar)
+            //bottomSheetDialog.show()
         } ?: bottomSheetDialog.hide()
 
     }
@@ -140,15 +138,15 @@ class MapDialogFooter(context: Context,private val viewModel:MapsViewModel) : Bo
         super.onCreate(savedInstanceState)
         setContentView(layoutInflater.inflate(R.layout.dialog_map_footer, null))
     }
-    fun bindBar(){
-        viewModel.footer.value?.let {barView ->
-            findViewById<ImageView>(R.id.ivBar)?.loadUrl(barView.photo)
-            findViewById<TextView>(R.id.tvBar)?.text = barView.name
-            findViewById<LinearLayout>(R.id.llFooter)?.setOnClickListener {
-                viewModel.onFooterClicked(barView)
+    fun bindBar(bar: BarView?){
+        bar?.let {
+            findViewById<ImageView>(R.id.ivBar)?.loadUrl(it.photo)
+            findViewById<TextView>(R.id.tvBar)?.text = it.name
+            findViewById<LinearLayout>(R.id.llFooter)?.setOnClickListener {view ->
+                viewModel.onFooterClicked(it)
             }
+            show()
         }
+
     }
-
-
 }
