@@ -112,7 +112,7 @@ class EmailPasswordViewModel(
             emailField.set(currentUser?.email)
             signedInButtons.set(currentUser != null)
             if (currentUser != null) {
-                //navigator.goToMain()
+                navigator.goToMain()
             }
         }
     }
