@@ -1,11 +1,11 @@
 package com.mibaldi.presentation.ui.login
 
 import android.util.Log
-import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mibaldi.domain.entity.MyFirebaseUser
 import com.mibaldi.domain.interactors.account.CreateAccountInteractor
 import com.mibaldi.domain.interactors.login.SignInInteractor
 import com.mibaldi.domain.interactors.login.SignOutInteractor
@@ -25,11 +25,9 @@ class EmailPasswordViewModel(
     private val signOutInteractor: SignOutInteractor
 ) : ViewModel(), Scope by Scope.Impl() {
 
-    var emailField: ObservableField<String> = ObservableField("")
     var passwordField: ObservableField<String> = ObservableField("")
-    var signedInButtons: ObservableBoolean = ObservableBoolean(false)
 
-    val user = MutableLiveData<Boolean>()
+    val user = MutableLiveData<MyFirebaseUser>()
 
     private val _dataLoading = MutableLiveData<Boolean>()
     val dataLoading: LiveData<Boolean>
@@ -61,13 +59,11 @@ class EmailPasswordViewModel(
     fun signOut() {
         launch {
             signOutInteractor.signOut()
-            signedInButtons.set(false)
-            emailField.set("")
         }
     }
 
     fun signIn() {
-        val email = emailField.get() ?: ""
+        val email = user.value?.email ?: ""
         val password = passwordField.get() ?: ""
         Log.d("EmailPassword", "signIn:$email")
         if (!validateForm(email, password)) {
@@ -78,19 +74,17 @@ class EmailPasswordViewModel(
             val signIn = signInInteractor.signIn(email, password)
             signIn.either(::handleFailure, ::handleSuccess)
             _dataLoading.value = false
-
         }
     }
 
     fun createAccount() {
-        val email = emailField.get() ?: ""
         val password = passwordField.get() ?: ""
-        if (!validateForm(email, password)) {
+        if (!validateForm(user.value?.email ?: "", password)) {
             return
         }
         launch {
             _dataLoading.value = true
-            val createAccount = createAccountInteractor.createAccount(email, password)
+            val createAccount = createAccountInteractor.createAccount(user.value?.email ?: "", password)
             createAccount.either(::handleFailure, ::handleSuccess)
             _dataLoading.value = false
 
@@ -107,10 +101,8 @@ class EmailPasswordViewModel(
 
     fun onStart() {
         launch {
-            val currentUser = getCurrentUserInteractor.currentUser()
-            emailField.set(currentUser?.email)
-            signedInButtons.set(currentUser != null)
-            if (currentUser != null) {
+            user.value = getCurrentUserInteractor.currentUser()
+            if (user.value != null) {
                 //navigator.goToMain()
             }
         }

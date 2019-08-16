@@ -10,14 +10,16 @@ import com.mibaldi.presentation.databinding.ActivityEmailPasswordBinding
 import kotlinx.android.synthetic.main.activity_email_password.*
 import org.koin.android.scope.currentScope
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class EmailPasswordActivity : BaseActivity() {
 
-    private val viewModel: EmailPasswordViewModel by currentScope.viewModel(this)
+    private val viewModel: EmailPasswordViewModel by currentScope.viewModel(this) { parametersOf(this@EmailPasswordActivity) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_email_password)
+
         viewModel.error.observe(this, Observer(::showError))
 
         val binding: ActivityEmailPasswordBinding =
