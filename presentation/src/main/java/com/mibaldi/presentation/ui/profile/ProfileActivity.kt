@@ -12,10 +12,11 @@ import com.mibaldi.presentation.databinding.ActivityProfileBinding
 import kotlinx.android.synthetic.main.activity_profile.*
 import org.koin.android.scope.currentScope
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class ProfileActivity : BaseActivity() {
 
-    private val viewModel: ProfileViewModel by currentScope.viewModel(this)
+    private val viewModel: ProfileViewModel by currentScope.viewModel(this){ parametersOf(this@ProfileActivity) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
