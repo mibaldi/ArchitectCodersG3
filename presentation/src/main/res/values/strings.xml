@@ -8,5 +8,6 @@
     <string name="auth_failed">Authentication failed</string>
     <string name="loading">Loading…</string>
     <string name="sign_out">Sign Out</string>
+    <string name="logout">Logout</string>
     <string name="title_activity_maps">Map</string>
 </resources>

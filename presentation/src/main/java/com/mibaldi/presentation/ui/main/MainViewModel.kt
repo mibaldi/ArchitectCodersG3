@@ -9,7 +9,7 @@ import com.mibaldi.presentation.ui.common.Navigator
 import com.mibaldi.presentation.ui.common.ScopedViewModel
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val barInteractor: GetBarInteractor, private val navigator: Navigator) : ScopedViewModel() {
+class MainViewModel(private val navigator: Navigator, private val barInteractor: GetBarInteractor) : ScopedViewModel() {
 
     private val _items = MutableLiveData<List<BarView>>()
     val items: LiveData<List<BarView>>

@@ -4,31 +4,24 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
-import com.google.firebase.firestore.FirebaseFirestore
-import com.mibaldi.data.repository.FirestoreSimpleRepository
-import com.mibaldi.domain.interactors.bar.GetBarInteractor
 import com.mibaldi.presentation.R
 import com.mibaldi.presentation.base.activities.BaseActivity
 import com.mibaldi.presentation.databinding.ActivityMainBinding
-import com.mibaldi.presentation.framework.datasources.FirestoreSimpleDataSource
 import com.mibaldi.presentation.ui.adapters.BarAdapter
-import com.mibaldi.presentation.ui.common.Navigator
-import com.mibaldi.presentation.utils.getViewModel
+import org.koin.android.scope.currentScope
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 
 class MainActivity : BaseActivity() {
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by currentScope.viewModel(this) { parametersOf(this@MainActivity) }
+
     private lateinit var adapter: BarAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val firestoreDataSource =
-            FirestoreSimpleDataSource(FirebaseFirestore.getInstance())
-        val repository = FirestoreSimpleRepository(firestoreDataSource)
-        val getBarInteractor = GetBarInteractor(repository)
-        val navigator = Navigator(this)
-        viewModel = getViewModel { MainViewModel(getBarInteractor, navigator) }
-
+        setContentView(R.layout.activity_main)
 
         val binding: ActivityMainBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)
