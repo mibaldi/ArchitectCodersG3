@@ -19,7 +19,7 @@ class ProfileViewModel(
 ) : ViewModel(), Scope by Scope.Impl() {
 
     private val _user = MutableLiveData<MyFirebaseUser?>()
-    val user : LiveData<MyFirebaseUser?>
+    val user: LiveData<MyFirebaseUser?>
         get() {
             if (_user.value == null) refresh()
             return _user
@@ -45,8 +45,7 @@ class ProfileViewModel(
             if (myFirebaseUser != null) {
                 _user.value = myFirebaseUser
                 _dataLoading.value = false
-            }
-            else navigator.goToLogin()
+            } else navigator.goToLogin()
         }
     }
 
