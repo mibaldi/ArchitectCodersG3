@@ -1,13 +1,8 @@
 package com.mibaldi.presentation.ui.map
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -16,7 +11,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mibaldi.data.repository.FirestoreSimpleRepository
 import com.mibaldi.domain.interactors.bar.GetBarInteractor
@@ -27,7 +21,6 @@ import com.mibaldi.presentation.databinding.ActivityMapsBindingImpl
 import com.mibaldi.presentation.framework.datasources.FirestoreSimpleDataSource
 import com.mibaldi.presentation.ui.common.Navigator
 import com.mibaldi.presentation.utils.PermissionRequester
-import com.mibaldi.presentation.utils.loadUrl
 import com.mibaldi.presentation.utils.observe
 import com.mibaldi.presentation.utils.withViewModel
 
@@ -37,7 +30,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     private lateinit var mMap: GoogleMap
     private val coarsePermissionRequester = PermissionRequester(this, ACCESS_COARSE_LOCATION)
     private lateinit var viewModel: MapsViewModel
-    private lateinit var bottomSheetDialog : MapDialogFooter
+    private lateinit var bottomSheetDialog : MapBottomDialogFragment
 
     val ZOOM_LEVEL = 13f
 
@@ -65,7 +58,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
 
         binding.model = viewModel
         binding.lifecycleOwner = this
-        bottomSheetDialog = MapDialogFooter(this,viewModel)
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -73,10 +66,18 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
     }
     private fun showFooter(bar: BarView?) {
         bar?.let {
-            bottomSheetDialog.bindBar(bar)
+            showBottom(it)
             //bottomSheetDialog.show()
-        } ?: bottomSheetDialog.hide()
+        } ?: bottomSheetDialog.dismiss()
 
+    }
+
+    private fun showBottom(bar: BarView) {
+        bottomSheetDialog = MapBottomDialogFragment.newInstance(bar,viewModel)
+
+        bottomSheetDialog.show(
+            supportFragmentManager,
+            "map_dialog_fragment")
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -126,27 +127,4 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClick
         }
     }
 
-}
-class MapDialogFooter(context: Context,private val viewModel:MapsViewModel) : BottomSheetDialog(context) {
-    init {
-        if (context is Activity) {
-            ownerActivity = context
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(layoutInflater.inflate(R.layout.dialog_map_footer, null))
-    }
-    fun bindBar(bar: BarView?){
-        bar?.let {
-            findViewById<ImageView>(R.id.ivBar)?.loadUrl(it.photo)
-            findViewById<TextView>(R.id.tvBar)?.text = it.name
-            findViewById<LinearLayout>(R.id.llFooter)?.setOnClickListener {view ->
-                viewModel.onFooterClicked(it)
-            }
-            show()
-        }
-
-    }
 }
