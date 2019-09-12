@@ -4,7 +4,6 @@ import com.mibaldi.domain.entity.Bar
 
 
 interface FirestoreRepository : BaseRepository {
-    suspend fun addBars(bars: List<Bar>)
+    suspend fun updateBar(bar: Bar)
     suspend fun getBarsOnce(): List<Bar>
-    suspend fun getBarsRealTime()
 }

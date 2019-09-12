@@ -3,12 +3,12 @@ package com.mibaldi.presentation.ui.profile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mibaldi.domain.entity.MyFirebaseUser
 import com.mibaldi.domain.interactors.account.RemoveAccountInteractor
 import com.mibaldi.domain.interactors.login.SignOutInteractor
 import com.mibaldi.domain.interactors.user.GetCurrentUserInteractor
 import com.mibaldi.presentation.ui.common.Navigator
-import com.mibaldi.presentation.ui.common.Scope
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
@@ -16,7 +16,7 @@ class ProfileViewModel(
     private val getCurrentUserInteractor: GetCurrentUserInteractor,
     private val signOutInteractor: SignOutInteractor,
     private val removeAccountInteractor: RemoveAccountInteractor
-) : ViewModel(), Scope by Scope.Impl() {
+) : ViewModel() {
 
     private val _user = MutableLiveData<MyFirebaseUser?>()
     val user: LiveData<MyFirebaseUser?>
@@ -34,12 +34,11 @@ class ProfileViewModel(
         get() = _error
 
     init {
-        initScope()
         refresh()
     }
 
     private fun refresh() {
-        launch {
+        viewModelScope.launch {
             _dataLoading.value = true
             val myFirebaseUser = getCurrentUserInteractor.currentUser()
             if (myFirebaseUser != null) {
@@ -49,22 +48,17 @@ class ProfileViewModel(
         }
     }
 
-    override fun onCleared() {
-        destroyScope()
-        super.onCleared()
-    }
-
     fun logout() {
-        launch {
+        viewModelScope.launch {
             signOutInteractor.signOut()
             navigator.goToLogin()
         }
     }
 
     fun removeAccount() {
-        launch {
+        viewModelScope.launch {
             _dataLoading.value = true
-            removeAccountInteractor.removeAccount().either(::handleFailure, ::handleSuccess)
+            removeAccountInteractor.removeAccount().fold(::handleFailure, ::handleSuccess)
         }
     }
 

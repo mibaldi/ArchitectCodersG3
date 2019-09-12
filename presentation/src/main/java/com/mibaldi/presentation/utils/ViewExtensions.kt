@@ -1,5 +1,6 @@
 package com.mibaldi.presentation.utils
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,9 +45,12 @@ inline fun <VH : RecyclerView.ViewHolder, T> RecyclerView.Adapter<VH>.basicDiffU
         }).dispatchUpdatesTo(this@basicDiffUtil)
     }
 
+fun ImageView.loadUrl(url: String) {
+    Glide.with(context).load(url).into(this)
+}
 
-fun ImageView.loadUrl(url: String?) {
-    url?.let { Glide.with(context).load(it).into(this) }
+fun ImageView.loadResource(drawable: Drawable) {
+    Glide.with(context).load(drawable).into(this)
 }
 
 
@@ -65,12 +69,16 @@ fun View.snack(message: String, length: Int = Snackbar.LENGTH_LONG) = snack(mess
 /**
  * Show a snackbar with [messageRes]
  */
-fun View.snack(@StringRes messageRes: Int, length: Int = Snackbar.LENGTH_LONG) = snack(messageRes, length) {}
+fun View.snack(@StringRes messageRes: Int, length: Int = Snackbar.LENGTH_LONG) =
+    snack(messageRes, length) {}
 
 /**
  * Show a snackbar with [message], execute [f] and show it
  */
-inline fun View.snack(message: String, @Snackbar.Duration length: Int = Snackbar.LENGTH_LONG, f: Snackbar.() -> Unit) {
+inline fun View.snack(
+    message: String, @Snackbar.Duration length: Int = Snackbar.LENGTH_LONG,
+    f: Snackbar.() -> Unit
+) {
     val snack = Snackbar.make(this, message, length)
     snack.f()
     snack.show()
@@ -79,7 +87,9 @@ inline fun View.snack(message: String, @Snackbar.Duration length: Int = Snackbar
 /**
  * Show a snackbar with [messageRes], execute [f] and show it
  */
-inline fun View.snack(@StringRes messageRes: Int, @Snackbar.Duration length: Int = Snackbar.LENGTH_LONG, f: Snackbar.() -> Unit) {
+inline fun View.snack(
+    @StringRes messageRes: Int, @Snackbar.Duration length: Int = Snackbar.LENGTH_LONG, f: Snackbar.() -> Unit
+) {
     val snack = Snackbar.make(this, messageRes, length)
     snack.f()
     snack.show()
