@@ -1,6 +1,7 @@
 package com.mibaldi.presentation.framework.api.brewery.entity
 
 import com.google.gson.annotations.SerializedName
+import com.mibaldi.domain.entity.Beer
 
 data class Datum(
 
@@ -34,4 +35,8 @@ data class Datum(
     var glass: Glass? = null,
     @SerializedName("style")
     var style: Style? = null
-)
+) {
+    fun toBeer(): Beer {
+        return Beer(id.orEmpty(), nameDisplay.orEmpty(), labels?.large.orEmpty(), "", 0f)
+    }
+}

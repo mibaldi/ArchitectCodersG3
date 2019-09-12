@@ -5,13 +5,13 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mibaldi.domain.entity.MyFirebaseUser
 import com.mibaldi.domain.interactors.account.CreateAccountInteractor
 import com.mibaldi.domain.interactors.login.SignInInteractor
 import com.mibaldi.domain.interactors.login.SignOutInteractor
 import com.mibaldi.domain.interactors.user.GetCurrentUserInteractor
 import com.mibaldi.presentation.ui.common.Navigator
-import com.mibaldi.presentation.ui.common.Scope
 import com.mibaldi.presentation.utils.Field
 import com.mibaldi.presentation.utils.validateEmail
 import com.mibaldi.presentation.utils.validatePassword
@@ -23,7 +23,7 @@ class EmailPasswordViewModel(
     private val getCurrentUserInteractor: GetCurrentUserInteractor,
     private val createAccountInteractor: CreateAccountInteractor,
     private val signOutInteractor: SignOutInteractor
-) : ViewModel(), Scope by Scope.Impl() {
+) : ViewModel() {
 
     var passwordField: ObservableField<String> = ObservableField("")
 
@@ -44,20 +44,8 @@ class EmailPasswordViewModel(
     val validateFormPassword: LiveData<Field>
         get() = _validateFormPassword
 
-
-    init {
-        initScope()
-
-    }
-
-    override fun onCleared() {
-        destroyScope()
-        super.onCleared()
-    }
-
-
     fun signOut() {
-        launch {
+        viewModelScope.launch {
             signOutInteractor.signOut()
         }
     }
@@ -69,10 +57,10 @@ class EmailPasswordViewModel(
         if (!validateForm(email, password)) {
             return
         }
-        launch {
+        viewModelScope.launch {
             _dataLoading.value = true
             val signIn = signInInteractor.signIn(email, password)
-            signIn.either(::handleFailure, ::handleSuccess)
+            signIn.fold(::handleFailure, ::handleSuccess)
             _dataLoading.value = false
         }
     }
@@ -82,10 +70,10 @@ class EmailPasswordViewModel(
         if (!validateForm(user.value?.email ?: "", password)) {
             return
         }
-        launch {
+        viewModelScope.launch {
             _dataLoading.value = true
             val createAccount = createAccountInteractor.createAccount(user.value?.email ?: "", password)
-            createAccount.either(::handleFailure, ::handleSuccess)
+            createAccount.fold(::handleFailure, ::handleSuccess)
             _dataLoading.value = false
 
         }
@@ -100,10 +88,10 @@ class EmailPasswordViewModel(
     }
 
     fun onStart() {
-        launch {
+        viewModelScope.launch {
             user.value = getCurrentUserInteractor.currentUser()
             if (user.value != null) {
-                //navigator.goToMain()
+                navigator.goToMain()
             }
         }
     }

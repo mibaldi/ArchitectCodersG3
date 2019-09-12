@@ -1,7 +1,7 @@
 package com.mibaldi.data.repository
 
 import com.mibaldi.data.datasource.LoginDataSource
-import com.mibaldi.domain.entity.Either
+import arrow.core.Either
 import com.mibaldi.domain.entity.MyFirebaseUser
 import com.mibaldi.domain.repository.LoginRepository
 

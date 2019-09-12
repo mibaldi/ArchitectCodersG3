@@ -83,6 +83,7 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             style="@style/FabStyle"
+            android:onClick="@{() -> model.clickAddBeer()}"
             app:layout_anchor="@+id/appBarLayout"
             app:layout_anchorGravity="bottom|right|end" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

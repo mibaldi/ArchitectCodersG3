@@ -8,6 +8,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import com.mibaldi.presentation.R
 import com.mibaldi.presentation.application.BrewingApp
+import com.mibaldi.presentation.ui.adapters.BeerAdapter
 
 abstract class BaseActivity : AppCompatActivity() {
     val TAG = "Activity"
@@ -41,4 +42,6 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onStop()
         hideProgressDialog()
     }
+
+
 }

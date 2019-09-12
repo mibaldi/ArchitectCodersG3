@@ -1,6 +1,6 @@
 package com.mibaldi.domain.interactors.login
 
-import com.mibaldi.domain.entity.Either
+import arrow.core.Either
 import com.mibaldi.domain.interactors.BaseInteractor
 import com.mibaldi.domain.repository.LoginRepository
 
