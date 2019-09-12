@@ -9,14 +9,13 @@
 
 
     <com.mibaldi.presentation.ui.common.SquareImageView
-        android:contentDescription="@string/image_beer_content_description"
         android:id="@+id/image"
-        app:srcCompat="@drawable/ic_image_broken"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/image_beer_content_description"
         android:scaleType="fitCenter"
-        />
+        app:srcCompat="@drawable/ic_image_broken" />
 
     <TextView
         android:id="@+id/title"
@@ -24,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@color/blackTransparent"
+        android:gravity="center"
         android:paddingStart="@dimen/spacing_medium"
         android:paddingTop="@dimen/spacing_large"
         android:paddingEnd="@dimen/spacing_medium"

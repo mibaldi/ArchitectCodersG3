@@ -6,4 +6,6 @@ data class Beer(
     val image: String,
     val observation: String?,
     val rating: Float = 0f
-)
+) {
+    constructor() : this("", "", "", "", 0f)
+}

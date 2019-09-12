@@ -28,10 +28,10 @@ class BeerAdapter constructor(private val onClickAction: (BeerView) -> Unit) :
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(beerView: BeerView, onClickAction: (BeerView) -> Unit) {
             itemView.setOnClickListener { onClickAction(beerView) }
-            with(beerView) {
-                itemView.title.text = beerView.title
-                Glide.with(itemView.context).load(image).error(R.drawable.ic_image_broken)
-                    .into(itemView.image)
+            with(itemView) {
+                title.text = beerView.title
+                Glide.with(context).load(beerView.image).error(R.drawable.ic_image_broken)
+                    .into(image)
             }
         }
     }
