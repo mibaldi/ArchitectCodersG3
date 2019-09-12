@@ -104,7 +104,13 @@ private val scopesModule = module {
         scoped { (activity: MainActivity) -> Navigator(activity) }
     }
     scope(named<BarDetailActivity>()) {
-        viewModel { (activity: BarDetailActivity) -> BarDetailViewModel(get { parametersOf(activity) }) }
+        viewModel { (activity: BarDetailActivity, barView: BarView) ->
+            BarDetailViewModel(get {
+                parametersOf(
+                    activity
+                )
+            }, barView)
+        }
         scoped { (activity: BarDetailActivity) -> Navigator(activity) }
     }
 

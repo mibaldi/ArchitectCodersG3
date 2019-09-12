@@ -1,24 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:padding="2dp"
-              android:foreground="?attr/selectableItemBackground">
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/elevation_low"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardUseCompatPadding="true">
+
+
+    <com.mibaldi.presentation.ui.common.SquareImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/image_beer_content_description"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/ic_image_broken" />
 
     <TextView
-            android:id="@+id/barTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:background="@color/colorPrimaryDark"
-            android:padding="8dp"
-            android:lines="2"
-            android:minLines="2"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
-            tools:text="@tools:sample/lorem" />
+        android:id="@+id/barTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimaryDarkTransparent"
+        android:gravity="center"
+        android:lines="2"
+        android:minLines="2"
+        android:padding="8dp"
+        android:paddingStart="@dimen/spacing_medium"
+        android:paddingTop="@dimen/spacing_large"
+        android:paddingEnd="@dimen/spacing_medium"
+        android:paddingBottom="@dimen/spacing_large"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
+        android:textColor="@android:color/white" />
 
-</LinearLayout>
+
+</androidx.cardview.widget.CardView>

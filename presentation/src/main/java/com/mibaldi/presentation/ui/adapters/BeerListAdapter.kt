@@ -5,36 +5,40 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mibaldi.presentation.R
-import com.mibaldi.presentation.data.model.BarView
+import com.mibaldi.presentation.data.model.BeerView
 import com.mibaldi.presentation.utils.basicDiffUtil
 import com.mibaldi.presentation.utils.inflate
-import kotlinx.android.synthetic.main.view_beer.view.*
+import kotlinx.android.synthetic.main.item_list_beer.view.*
 
-class BarAdapter(private val listener: (BarView) -> Unit) :
-    RecyclerView.Adapter<BarAdapter.ViewHolder>(), BindableAdapter<List<BarView>> {
+class BeerListAdapter :
+    RecyclerView.Adapter<BeerListAdapter.ViewHolder>(), BindableAdapter<List<BeerView>> {
 
-    override var data: List<BarView> by basicDiffUtil(
+    override var data: List<BeerView> by basicDiffUtil(
         emptyList(),
         areItemsTheSame = { old, new -> old.id == new.id }
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = parent.inflate(R.layout.view_beer)
+        val view = parent.inflate(R.layout.item_list_beer)
         return ViewHolder(view)
     }
 
     override fun getItemCount(): Int = data.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val bars = data[position]
-        holder.bind(bars)
-        holder.itemView.setOnClickListener { listener(bars) }
+        val beer = data[position]
+        holder.bind(beer)
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(bars: BarView) = with(itemView) {
-            barTitle.text = bars.name
-            Glide.with(context).load(bars.photo).error(R.drawable.ic_image_broken).into(image)
+        fun bind(beerView: BeerView) = with(itemView) {
+            with(itemView) {
+                nameText.text = beerView.title
+                ratingBar.rating = beerView.rating
+                Glide.with(context).load(beerView.image).error(R.drawable.ic_image_broken)
+                    .into(beerImage)
+            }
         }
     }
+
 }

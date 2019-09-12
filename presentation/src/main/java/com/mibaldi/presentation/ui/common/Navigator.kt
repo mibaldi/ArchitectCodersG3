@@ -26,7 +26,6 @@ class Navigator(private val activity: BaseActivity) {
 
     fun showAddBeer(bar: BarView) {
         val addPhotoBottomDialogFragment = AddBeerBottomDialogFragment.newInstance(bar)
-        addPhotoBottomDialogFragment.isCancelable = false
         addPhotoBottomDialogFragment.show(
             activity.supportFragmentManager,
             "add_beer_dialog_fragment"

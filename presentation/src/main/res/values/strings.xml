@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Brewing</string>
-    <string name="api_key">68290e64bbd29ecb4d95f6f42e3f94fe</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="sign_in">Sign In</string>
@@ -16,4 +15,6 @@
     <string name="accept">Aceptar</string>
     <string name="image_beer_content_description">Imagen de una cerveza</string>
     <string name="select_beer">Seleccione una cerveza</string>
+    <string name="rating_beers">Cervezas valoradas</string>
+    <string name="description">Descripción</string>
 </resources>
