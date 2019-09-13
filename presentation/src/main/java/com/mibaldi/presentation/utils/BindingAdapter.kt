@@ -8,6 +8,10 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mibaldi.domain.entity.MyFirebaseUser
+import com.mibaldi.presentation.data.model.BarView
+import com.mibaldi.presentation.data.model.BeerView
+import com.mibaldi.presentation.ui.adapters.BarAdapter
+import com.mibaldi.presentation.ui.adapters.BeerListAdapter
 import com.mibaldi.presentation.ui.adapters.BindableAdapter
 
 
@@ -23,12 +27,6 @@ fun View.setVisible(visible: Boolean?) {
     } ?: View.GONE
 }
 
-@BindingAdapter("data")
-fun <T> RecyclerView.setRecyclerViewProperties(items: T?) {
-    if (adapter is BindableAdapter<*>) {
-        items?.let { data -> (adapter as BindableAdapter<T>).data = data }
-    }
-}
 
 @BindingAdapter("user")
 fun TextView.resetField(user: MyFirebaseUser?) {

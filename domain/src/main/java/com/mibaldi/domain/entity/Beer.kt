@@ -4,8 +4,9 @@ data class Beer(
     val id: String,
     val title: String,
     val image: String,
-    val observation: String?,
-    val rating: Float = 0f
+    val observation: List<String>,
+    val rating: Float = 0f,
+    var votes: Int = 0
 ) {
-    constructor() : this("", "", "", "", 0f)
+    constructor() : this("", "", "", emptyList(), 0f, 0)
 }

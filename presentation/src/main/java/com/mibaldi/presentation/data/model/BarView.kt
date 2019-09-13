@@ -14,7 +14,7 @@ data class BarView(
     val category: String,
     val price: Int,
     val address: BarLocationView,
-    val beers: MutableList<BeerView>,
+    val beers: List<BeerView>,
     val web: String,
     val phone: String
 ) : Parcelable
@@ -30,7 +30,7 @@ fun Bar.toBarView() = BarView(
     category,
     price,
     address.toBarLocationView(),
-    beers.map { it.toBeerView() }.toMutableList(),
+    beers.map { it.toBeerView() },
     web,
     phone
 )

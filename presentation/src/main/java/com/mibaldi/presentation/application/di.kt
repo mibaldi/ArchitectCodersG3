@@ -104,14 +104,15 @@ private val scopesModule = module {
         scoped { (activity: MainActivity) -> Navigator(activity) }
     }
     scope(named<BarDetailActivity>()) {
-        viewModel { (activity: BarDetailActivity, barView: BarView) ->
+        viewModel { (activity: BarDetailActivity, barId: String) ->
             BarDetailViewModel(get {
                 parametersOf(
                     activity
                 )
-            }, barView)
+            }, get(), barId)
         }
         scoped { (activity: BarDetailActivity) -> Navigator(activity) }
+        scoped { GetBarInteractor(get()) }
     }
 
     scope(named<AddBeerBottomDialogFragment>()) {

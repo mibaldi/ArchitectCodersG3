@@ -14,13 +14,13 @@ import org.koin.core.parameter.parametersOf
 
 class BarDetailActivity : BaseActivity() {
     companion object {
-        const val BEER = "BarDetailActivity:beer"
+        const val BEER_ID = "BarDetailActivity:beerId"
     }
 
     private val adapter by lazy { BeerListAdapter() }
 
     private val viewModel: BarDetailViewModel by currentScope.viewModel(this) {
-        parametersOf(this@BarDetailActivity, intent?.extras?.get(BEER))
+        parametersOf(this@BarDetailActivity, intent?.extras?.get(BEER_ID))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,9 +32,11 @@ class BarDetailActivity : BaseActivity() {
         binding.model = viewModel
         binding.lifecycleOwner = this
 
+        barDetailToolbar.title = ""
         setSupportActionBar(barDetailToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.beersRecycler.adapter = adapter
     }
+
 }

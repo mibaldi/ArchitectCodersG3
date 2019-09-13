@@ -37,6 +37,6 @@ data class Datum(
     var style: Style? = null
 ) {
     fun toBeer(): Beer {
-        return Beer(id.orEmpty(), nameDisplay.orEmpty(), labels?.large.orEmpty(), "", 0f)
+        return Beer(id.orEmpty(), nameDisplay.orEmpty(), labels?.large.orEmpty(), emptyList(), 0f)
     }
 }

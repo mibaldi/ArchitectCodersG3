@@ -2,6 +2,7 @@ package com.mibaldi.presentation.ui.adapters
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mibaldi.presentation.R
@@ -15,7 +16,10 @@ class BeerListAdapter :
 
     override var data: List<BeerView> by basicDiffUtil(
         emptyList(),
-        areItemsTheSame = { old, new -> old.id == new.id }
+        areItemsTheSame = { old,
+                            new ->
+            (old.id == new.id && old.rating == new.rating)
+        }
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,13 +36,18 @@ class BeerListAdapter :
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(beerView: BeerView) = with(itemView) {
-            with(itemView) {
-                nameText.text = beerView.title
-                ratingBar.rating = beerView.rating
-                Glide.with(context).load(beerView.image).error(R.drawable.ic_image_broken)
-                    .into(beerImage)
-            }
+            nameText.text = beerView.title
+            ratingBar.rating = beerView.rating
+            Glide.with(context).load(beerView.image).error(R.drawable.ic_image_broken)
+                .into(beerImage)
         }
     }
 
+}
+
+@BindingAdapter("data")
+fun RecyclerView.setRecyclerViewProperties(items: List<BeerView>?) {
+    if (adapter is BeerListAdapter) {
+        (adapter as BeerListAdapter).data = items ?: emptyList()
+    }
 }
