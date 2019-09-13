@@ -1,6 +1,7 @@
 package com.mibaldi.presentation.framework.datasources
 
 import arrow.core.Either
+import arrow.core.right
 import com.mibaldi.data.datasource.BreweryDataSource
 import com.mibaldi.domain.entity.Beer
 import com.mibaldi.domain.entity.BeerPaged
@@ -13,9 +14,7 @@ class BrewerySimpleDataSource(private val apiClient: BreweryApi) : BreweryDataSo
         return try {
             val response = apiClient.listPopularBeersAsync(page = page)
             if (response.isSuccessful) {
-                response.body()?.let {
-                    Either.Right(it.toPagedBeer())
-                } ?: Either.Left(RepositoryException.DataNotFoundException)
+                response.body()?.toPagedBeer()?.right() ?: Either.Left(RepositoryException.DataNotFoundException)
             } else {
                 Either.Left(RepositoryException.DataNotFoundException)
             }

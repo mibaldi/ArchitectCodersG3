@@ -14,9 +14,9 @@ import com.mibaldi.presentation.utils.startActivity
 import com.mibaldi.presentation.utils.startActivityForResult
 
 class Navigator(private val activity: BaseActivity) {
-    fun goToDetail(bar: BarView) {
+    fun goToDetail(barId: String) {
         activity.startActivity<BarDetailActivity> {
-            putExtra(BarDetailActivity.BEER, bar)
+            putExtra(BarDetailActivity.BEER_ID, barId)
         }
     }
 
@@ -26,6 +26,7 @@ class Navigator(private val activity: BaseActivity) {
 
     fun showAddBeer(bar: BarView) {
         val addPhotoBottomDialogFragment = AddBeerBottomDialogFragment.newInstance(bar)
+
         addPhotoBottomDialogFragment.show(
             activity.supportFragmentManager,
             "add_beer_dialog_fragment"

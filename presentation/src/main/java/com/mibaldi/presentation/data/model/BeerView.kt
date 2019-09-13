@@ -9,10 +9,11 @@ data class BeerView(
     val id: String,
     val title: String,
     val image: String,
-    var observation: String?,
-    var rating: Float = 0f
+    var observation: MutableList<String>,
+    var rating: Float,
+    var votes: Int
 ) : Parcelable
 
-fun Beer.toBeerView() = BeerView(id, title, image, observation, rating)
+fun Beer.toBeerView() = BeerView(id, title, image, observation.toMutableList(), rating, votes)
 
-fun BeerView.toBeer() = Beer(id, title, image, observation, rating)
+fun BeerView.toBeer() = Beer(id, title, image, observation, rating, votes)

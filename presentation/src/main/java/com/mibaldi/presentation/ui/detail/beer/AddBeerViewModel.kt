@@ -24,8 +24,8 @@ class AddBeerViewModel(
     val navigateToBeerList: LiveData<Event<Unit>>
         get() = _navigateToBeerList
 
-    private val _accept = MutableLiveData<Event<Unit>>()
-    val accept: LiveData<Event<Unit>>
+    private val _accept = MutableLiveData<Event<BarView?>>()
+    val accept: LiveData<Event<BarView?>>
         get() = _accept
 
     val observations = MutableLiveData<String>()
@@ -48,16 +48,25 @@ class AddBeerViewModel(
 
     fun acceptClick() {
         val beerView = beerView.value
-        beerView?.let {
-            it.observation = observations.value
-            it.rating = rating.value ?: 0f
-            barView?.beers?.add(it)
-        }
+        beerView?.let { beer ->
+            beer.observation.add(observations.value.orEmpty())
 
-        viewModelScope.launch {
-            barView?.toBar()?.let { updateBarInteractor.updateBar(it) }
+            barView?.beers?.run {
+                firstOrNull { beer.id == it.id }?.let {
+                    it.votes += 1
+                    it.rating = (it.rating + (rating.value ?: 0f)) / 2
+                } ?: kotlin.run {
+                    beer.rating = rating.value ?: 0f
+                    beer.votes = 1
+                    toMutableList().add(beer)
+                }
+            }
+
+            viewModelScope.launch {
+                barView?.toBar()?.let { updateBarInteractor.updateBar(it) }
+            }
+            _accept.value = Event(barView)
         }
-        _accept.value = Event(Unit)
     }
 
     fun navigateToBeerListClick() {

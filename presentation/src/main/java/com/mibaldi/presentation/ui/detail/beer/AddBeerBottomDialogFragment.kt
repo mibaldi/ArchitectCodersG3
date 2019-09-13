@@ -16,10 +16,12 @@ import com.mibaldi.presentation.R
 import com.mibaldi.presentation.data.model.BarView
 import com.mibaldi.presentation.data.model.BeerView
 import com.mibaldi.presentation.databinding.FragmentAddBeerBottomSheetBinding
+import com.mibaldi.presentation.ui.detail.BarDetailViewModel
 import com.mibaldi.presentation.ui.detail.beer.BeerListActivity.Companion.BEER_SELECTED
 import com.mibaldi.presentation.utils.EventObserver
 import com.mibaldi.presentation.utils.startActivityForResult
 import org.koin.android.scope.currentScope
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -28,6 +30,8 @@ class AddBeerBottomDialogFragment : BottomSheetDialogFragment() {
     private val viewModel: AddBeerViewModel by currentScope.viewModel(this) {
         parametersOf(arguments?.getParcelable(BAR_SELECTED))
     }
+
+    private val sharedViewModel: BarDetailViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +54,10 @@ class AddBeerBottomDialogFragment : BottomSheetDialogFragment() {
             ) {}
         })
         viewModel.close.observe(this, EventObserver { dismiss() })
-        viewModel.accept.observe(this, EventObserver { dismiss() })
+        viewModel.accept.observe(this, EventObserver {
+            sharedViewModel.refresh(it)
+            dismiss()
+        })
         return binding.root
     }
 

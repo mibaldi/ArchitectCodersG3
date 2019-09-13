@@ -7,6 +7,7 @@
         <variable
             name="viewModel"
             type="com.mibaldi.presentation.ui.detail.beer.AddBeerViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -127,6 +128,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:enabled="@{viewModel.beerView!=null}"
             android:onClick="@{() -> viewModel.acceptClick()}"
             android:text="@string/accept"
             android:textColor="@android:color/black"
