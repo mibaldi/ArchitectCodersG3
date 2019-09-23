@@ -26,7 +26,9 @@ internal class MapBottomDialogFragment(private val bar: BarView,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bar.let {
-            view.findViewById<ImageView>(R.id.ivBar)?.loadUrl(it.photo)
+            it.photo?.let {photo ->
+                view.findViewById<ImageView>(R.id.ivBar)?.loadUrl(photo)
+            }
             view.findViewById<TextView>(R.id.tvBar)?.text = it.name
             view.findViewById<LinearLayout>(R.id.llFooter)?.setOnClickListener { view ->
                 viewModel.onFooterClicked(it)

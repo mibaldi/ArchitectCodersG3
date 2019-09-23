@@ -47,7 +47,6 @@ class EmailPasswordViewModel(
         get() = _validateFormPassword
 
     init {
-        initScope()
         user.value = MyFirebaseUser("")
     }
     fun signOut() {
@@ -96,7 +95,7 @@ class EmailPasswordViewModel(
     }
 
     fun onStart() {
-        launch {
+        viewModelScope.launch {
             val currentUser = getCurrentUserInteractor.currentUser()
             signedInButtons.set(currentUser != null)
             if (currentUser != null) {

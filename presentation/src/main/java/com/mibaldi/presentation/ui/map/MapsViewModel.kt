@@ -1,20 +1,18 @@
 package com.mibaldi.presentation.ui.map
 
-import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
-import com.mibaldi.data.repository.PermissionChecker
 import com.mibaldi.domain.entity.Bar
 import com.mibaldi.domain.interactors.bar.GetBarInteractor
 import com.mibaldi.presentation.data.model.BarView
 import com.mibaldi.presentation.data.model.toBarView
 import com.mibaldi.presentation.ui.common.Navigator
-import com.mibaldi.presentation.ui.common.Scope
 import kotlinx.coroutines.launch
 
-class MapsViewModel(private val navigator: Navigator,private val barInteractor: GetBarInteractor) : ViewModel(), Scope by Scope.Impl() {
+class MapsViewModel(private val navigator: Navigator,private val barInteractor: GetBarInteractor) : ViewModel() {
     private var results: List<Bar> = listOf()
 
     private val _bars = MutableLiveData<List<BarView>>()
@@ -31,23 +29,14 @@ class MapsViewModel(private val navigator: Navigator,private val barInteractor: 
     val footer: LiveData<BarView?>
         get() = _footer
 
-    init {
-
-        initScope()
-    }
 
     private fun refresh() {
-        launch {
+        viewModelScope.launch {
             _dataLoading.value = true
             results = barInteractor.getAllBars()
             _bars.value = results.map { it.toBarView() }
             _dataLoading.value = false
         }
-    }
-
-    override fun onCleared() {
-        destroyScope()
-        super.onCleared()
     }
 
     fun clickOnBar(position: LatLng?) {
@@ -64,6 +53,6 @@ class MapsViewModel(private val navigator: Navigator,private val barInteractor: 
     }
 
     fun onFooterClicked(bar: BarView) {
-        navigator.goToDetail(bar)
+        navigator.goToDetail(bar.id)
     }
 }
