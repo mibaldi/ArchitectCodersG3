@@ -6,4 +6,10 @@
             android:orderInCategory="200"
             app:showAsAction="always"
             android:title="profile" />
+    <item
+            android:id="@+id/menuMap"
+            android:icon="@drawable/ic_map"
+            android:orderInCategory="200"
+            app:showAsAction="always"
+            android:title="map" />
 </menu>

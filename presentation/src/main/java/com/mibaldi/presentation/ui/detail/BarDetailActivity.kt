@@ -1,6 +1,8 @@
 package com.mibaldi.presentation.ui.detail
 
 import android.os.Bundle
+import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.mibaldi.presentation.R
 import com.mibaldi.presentation.base.activities.BaseActivity
@@ -39,4 +41,13 @@ class BarDetailActivity : BaseActivity() {
         binding.beersRecycler.adapter = adapter
     }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }

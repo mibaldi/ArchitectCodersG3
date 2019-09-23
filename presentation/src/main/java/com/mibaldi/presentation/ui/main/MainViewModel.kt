@@ -41,5 +41,8 @@ class MainViewModel(private val navigator: Navigator, private val barInteractor:
     fun goToProfile() {
         navigator.goToProfile()
     }
+    fun goToMap() {
+        navigator.goToMap()
+    }
 
 }

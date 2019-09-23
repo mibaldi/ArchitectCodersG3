@@ -8,6 +8,7 @@
     <string name="loading">Loading…</string>
     <string name="sign_out">Sign Out</string>
     <string name="logout">Logout</string>
+    <string name="title_activity_maps">Map</string>
     <string name="rating">Califícala</string>
     <string name="observations">Observaciones</string>
     <string name="insert_text">Introduzca un texto</string>
