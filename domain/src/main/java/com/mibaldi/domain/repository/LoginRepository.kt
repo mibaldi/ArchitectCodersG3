@@ -1,6 +1,6 @@
 package com.mibaldi.domain.repository
 
-import com.mibaldi.domain.entity.Either
+import arrow.core.Either
 import com.mibaldi.domain.entity.MyFirebaseUser
 
 interface LoginRepository : BaseRepository {

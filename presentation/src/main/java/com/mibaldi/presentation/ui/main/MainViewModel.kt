@@ -2,14 +2,16 @@ package com.mibaldi.presentation.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mibaldi.domain.interactors.bar.GetBarInteractor
 import com.mibaldi.presentation.data.model.BarView
 import com.mibaldi.presentation.data.model.toBarView
 import com.mibaldi.presentation.ui.common.Navigator
-import com.mibaldi.presentation.ui.common.ScopedViewModel
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val navigator: Navigator, private val barInteractor: GetBarInteractor) : ScopedViewModel() {
+class MainViewModel(private val navigator: Navigator, private val barInteractor: GetBarInteractor) :
+    ViewModel() {
 
     private val _items = MutableLiveData<List<BarView>>()
     val items: LiveData<List<BarView>>
@@ -22,12 +24,9 @@ class MainViewModel(private val navigator: Navigator, private val barInteractor:
     val dataLoading: LiveData<Boolean>
         get() = _dataLoading
 
-    init {
-        initScope()
-    }
 
     private fun refresh() {
-        launch {
+        viewModelScope.launch {
             _dataLoading.value = true
             val results = barInteractor.getAllBars()
             _items.value = results.map { it.toBarView() }
@@ -36,7 +35,7 @@ class MainViewModel(private val navigator: Navigator, private val barInteractor:
     }
 
     fun onBarClicked(bar: BarView) {
-        navigator.goToDetail(bar)
+        navigator.goToDetail(bar.id)
     }
 
     fun goToProfile() {

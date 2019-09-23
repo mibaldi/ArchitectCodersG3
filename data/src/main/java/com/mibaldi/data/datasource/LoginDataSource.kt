@@ -1,6 +1,6 @@
 package com.mibaldi.data.datasource
 
-import com.mibaldi.domain.entity.Either
+import arrow.core.Either
 import com.mibaldi.domain.entity.MyFirebaseUser
 
 interface LoginDataSource: BaseDataSource {

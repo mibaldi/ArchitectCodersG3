@@ -5,7 +5,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.mibaldi.data.datasource.LoginDataSource
-import com.mibaldi.domain.entity.Either
+import arrow.core.Either
 import com.mibaldi.domain.entity.MyFirebaseUser
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -83,7 +83,7 @@ object LoginDataSourceImpl : LoginDataSource {
 
     override suspend fun removeAccount(): Either<String, Boolean> {
         val user = FirebaseAuth.getInstance().currentUser
-       return suspendCancellableCoroutine<Either<String, Boolean>> { continuation ->
+       return suspendCancellableCoroutine { continuation ->
             user?.delete()?.addOnSuccessListener {
                     Log.d(TAG, "User account deleted.")
                     if (continuation.isActive) continuation.resume(Either.Right(true))

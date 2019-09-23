@@ -2,7 +2,9 @@ package com.mibaldi.presentation.ui.adapters
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mibaldi.presentation.R
 import com.mibaldi.presentation.data.model.BarView
 import com.mibaldi.presentation.utils.basicDiffUtil
@@ -31,8 +33,17 @@ class BarAdapter(private val listener: (BarView) -> Unit) :
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(bars: BarView) {
-            itemView.barTitle.text = bars.name
+        fun bind(bars: BarView) = with(itemView) {
+            barTitle.text = bars.name
+            Glide.with(context).load(bars.photo).error(R.drawable.ic_image_broken).into(image)
         }
+    }
+}
+
+
+@BindingAdapter("data")
+fun RecyclerView.setRecyclerViewProperties(items: List<BarView>?) {
+    if (adapter is BarAdapter) {
+        (adapter as BarAdapter).data = items ?: emptyList()
     }
 }
