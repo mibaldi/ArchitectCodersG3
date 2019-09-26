@@ -58,7 +58,7 @@ class AddBeerViewModel(
                 } ?: kotlin.run {
                     beer.rating = rating.value ?: 0f
                     beer.votes = 1
-                    toMutableList().add(beer)
+                    add(beer)
                 }
             }
 
